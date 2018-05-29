@@ -32,7 +32,7 @@ class TimetableController extends Controller
      */
     public function createAction(Request $request)
     {
-        $form = $this->createForm(TimetableType::class);
+        $form = $this->createForm(TimetableType::class, new Timetable());
 
         return $this->handleForm($form, $request);
     }
@@ -49,21 +49,48 @@ class TimetableController extends Controller
 
         foreach ($timetable->getDates() as $date) {
             $dateStart = null;
+            $dateEnd = null;
             foreach ($date->getItems() as $item) {
                 if (null === $dateStart) {
                     $dateStart = $item->getDateStart();
                 }
-
+                if (null === $dateEnd) {
+                    $dateEnd = $item->getDateStart();
+                }
                 if ($dateStart > $item->getDateStart()) {
                     $dateStart = $item->getDateStart();
                 }
-
                 if ($dateStart > $item->getDateEnd()) {
                     $dateStart = $item->getDateEnd();
                 }
+                if ($dateEnd < $item->getDateStart()) {
+                    $dateEnd = $item->getDateStart();
+                }
+                if ($dateEnd < $item->getDateEnd()) {
+                    $dateEnd = $item->getDateEnd();
+                }
+            }
+            $dateStart = clone $dateStart;
+            $dateStart->setTime($dateStart->format('G'), 0);
+
+            $dateEnd = clone $dateEnd;
+            if ((int)$dateEnd->format('i') !== 0) {
+                $dateEnd->setTime((int)$dateEnd->format('G') + 1, 0);
             }
 
             $timeStart = $dateStart->getTimestamp();
+            $headers = new ArrayCollection();
+            while ($dateStart < $dateEnd) {
+                $start = ($dateStart->getTimestamp() - $timeStart) / $minutes + 2;
+                $headers->add([
+                    'date' => clone $dateStart,
+                    'start' => $start,
+                    'end' => $start + 4,
+                ]);
+                $dateStart->modify('+1 hour');
+            }
+            $date->setHeaders($headers);
+
             foreach ($date->getItems() as $item) {
                 $items->set($item->getId(), [
                     'start' => ($item->getDateStart()->getTimestamp() - $timeStart) / $minutes + 2,
@@ -72,8 +99,7 @@ class TimetableController extends Controller
             }
         }
 
-
-        return $this->render('DisjfaTimetable/Timetable/show.html.twig', [
+        return $this->render('@DisjfaTimetable/Timetable/show.html.twig', [
             'timetable' => $timetable,
             'items' => $items,
         ]);

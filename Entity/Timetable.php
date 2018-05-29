@@ -26,6 +26,12 @@ class Timetable
     private $title;
 
     /**
+     * @var string
+     * @ORM\Column(name="side", type="string")
+     */
+    private $side;
+
+    /**
      * @var TimetablePlace[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="Disjfa\TimetableBundle\Entity\TimetablePlace", mappedBy="timetable")
      * @ORM\OrderBy({"seqnr" = "ASC"})
@@ -38,6 +44,11 @@ class Timetable
      * @ORM\OrderBy({"dateAt" = "ASC"})
      */
     private $dates;
+
+    public function __construct()
+    {
+        $this->side = 'horizontal';
+    }
 
     /**
      * @return string
@@ -77,5 +88,21 @@ class Timetable
     public function getDates()
     {
         return $this->dates;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSide(): string
+    {
+        return $this->side;
+    }
+
+    /**
+     * @param string $side
+     */
+    public function setSide(string $side): void
+    {
+        $this->side = $side;
     }
 }
