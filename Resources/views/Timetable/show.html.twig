@@ -2,28 +2,30 @@
 
 {% block body %}
     <div class="container">
-        <h1>{{ timetable.title }}
-            <a href="{{ path('disjfa_timetable_timetable_edit', {'timetable': timetable.id}) }}">
+        <timetable timetable-url="{{ path('disjfa_timetable_api_timetable_show', {'timetable': timetable.timetable.id}) }}"></timetable>
+
+        <h1>{{ timetable.timetable.title }}
+            <a href="{{ path('disjfa_timetable_timetable_edit', {'timetable': timetable.timetable.id}) }}">
                 <i class="fas fa-edit"></i>
             </a>
         </h1>
         <div class="btn-group">
-            <a href="{{ path('disjfa_timetable_date_create', {'timetable': timetable.id}) }}" class="btn btn-outline-primary">
+            <a href="{{ path('disjfa_timetable_date_create', {'timetable': timetable.timetable.id}) }}" class="btn btn-outline-primary">
                 Add date
             </a>
-            <a href="{{ path('disjfa_timetable_place_create', {'timetable': timetable.id}) }}" class="btn btn-outline-primary">
+            <a href="{{ path('disjfa_timetable_place_create', {'timetable': timetable.timetable.id}) }}" class="btn btn-outline-primary">
                 Add place
             </a>
         </div>
         {% for date in timetable.dates %}
             <div class="py-3">
                 <h3>
-                    {{ date.title }}
-                    <a href="{{ path('disjfa_timetable_date_edit', {'timetableDate': date.id}) }}">
+                    {{ date.timetableDate.title }}
+                    <a href="{{ path('disjfa_timetable_date_edit', {'timetableDate': date.timetableDate.id}) }}">
                         <i class="fas fa-edit"></i>
                     </a>
                 </h3>
-                {{ date.dateAt | date }}
+                {{ date.timetableDate.dateAt | date }}
                 <div class="table-responsive">
                     <div class="timetable py-3">
                         {% for header in date.headers %}
@@ -35,26 +37,29 @@
                             {% set row = loop.index + 1 %}
                             <div class="box box-title" style="grid-row: 1; grid-column: {{ row }};">
                                 <div>
-                                    {{ place.title }}
+                                    {{ place.timetablePlace.title }}
                                 </div>
-                                <a href="{{ path('disjfa_timetable_place_edit', {'timetablePlace': place.id}) }}">
+                                <a href="{{ path('disjfa_timetable_place_edit', {'timetablePlace': place.timetablePlace.id}) }}">
                                     <i class="fas fa-edit"></i>
                                     edit
                                 </a>
-                                <a href="{{ path('disjfa_timetable_item_create', {'timetableDate': date.id, 'timetablePlace': place.id}) }}">
+                                <a href="{{ path('disjfa_timetable_item_create', {'timetableDate': date.timetableDate.id, 'timetablePlace': place.timetablePlace.id}) }}">
                                     <i class="fas fa-plus"></i>
                                     add
                                 </a>
                             </div>
-                            {% for item in place.itemsByDate(date) %}
-                                <a class="box" style="grid-row: {{ items[item.id].start }} / {{ items[item.id].end }}; grid-column: {{ row }};" href="{{ path('disjfa_timetable_item_edit', {'timetableItem': item.id}) }}">
-                                    <strong>{{ item.title }}</strong>
-                                    <i class="fas fa-edit"></i>
-                                    <br>
-                                    <small class="text-light">
-                                        {{ item.dateStart | date('H:i') }} / {{ item.dateEnd | date('H:i') }}
-                                    </small>
-                                </a>
+                            {% for item in timetable.items %}
+                                {% if item.item.place.id == place.timetablePlace.id and item.item.date.id == date.timetableDate.id %}
+                                    <a class="box" style="grid-row: {{ item.start }} / {{ item.end }}; grid-column: {{ row }};" href="{{ path('disjfa_timetable_item_edit', {'timetableItem': item.item.id}) }}">
+                                        <strong>{{ item.item.title }}</strong>
+                                        <i class="fas fa-edit"></i>
+                                        <br>
+                                        <small class="text-light">
+                                            {{ item.item.dateStart | date('H:i') }}
+                                            / {{ item.item.dateEnd | date('H:i') }}
+                                        </small>
+                                    </a>
+                                {% endif %}
                             {% endfor %}
                         {% endfor %}
                     </div>

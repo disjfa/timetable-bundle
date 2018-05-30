@@ -4,7 +4,7 @@ namespace Disjfa\TimetableBundle\Controller;
 
 use Disjfa\TimetableBundle\Entity\Timetable;
 use Disjfa\TimetableBundle\Form\Type\TimetableType;
-use Doctrine\Common\Collections\ArrayCollection;
+use Disjfa\TimetableBundle\Timetable\TimetablePresenter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormInterface;
@@ -44,64 +44,8 @@ class TimetableController extends Controller
      */
     public function showAction(Timetable $timetable)
     {
-        $minutes = 60 * 15;
-        $items = new ArrayCollection();
-
-        foreach ($timetable->getDates() as $date) {
-            $dateStart = null;
-            $dateEnd = null;
-            foreach ($date->getItems() as $item) {
-                if (null === $dateStart) {
-                    $dateStart = $item->getDateStart();
-                }
-                if (null === $dateEnd) {
-                    $dateEnd = $item->getDateStart();
-                }
-                if ($dateStart > $item->getDateStart()) {
-                    $dateStart = $item->getDateStart();
-                }
-                if ($dateStart > $item->getDateEnd()) {
-                    $dateStart = $item->getDateEnd();
-                }
-                if ($dateEnd < $item->getDateStart()) {
-                    $dateEnd = $item->getDateStart();
-                }
-                if ($dateEnd < $item->getDateEnd()) {
-                    $dateEnd = $item->getDateEnd();
-                }
-            }
-            $dateStart = clone $dateStart;
-            $dateStart->setTime($dateStart->format('G'), 0);
-
-            $dateEnd = clone $dateEnd;
-            if ((int)$dateEnd->format('i') !== 0) {
-                $dateEnd->setTime((int)$dateEnd->format('G') + 1, 0);
-            }
-
-            $timeStart = $dateStart->getTimestamp();
-            $headers = new ArrayCollection();
-            while ($dateStart < $dateEnd) {
-                $start = ($dateStart->getTimestamp() - $timeStart) / $minutes + 2;
-                $headers->add([
-                    'date' => clone $dateStart,
-                    'start' => $start,
-                    'end' => $start + 4,
-                ]);
-                $dateStart->modify('+1 hour');
-            }
-            $date->setHeaders($headers);
-
-            foreach ($date->getItems() as $item) {
-                $items->set($item->getId(), [
-                    'start' => ($item->getDateStart()->getTimestamp() - $timeStart) / $minutes + 2,
-                    'end' => ($item->getDateEnd()->getTimestamp() - $timeStart) / $minutes + 2,
-                ]);
-            }
-        }
-
         return $this->render('@DisjfaTimetable/Timetable/show.html.twig', [
-            'timetable' => $timetable,
-            'items' => $items,
+            'timetable' => new TimetablePresenter($timetable),
         ]);
     }
 

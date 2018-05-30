@@ -118,20 +118,4 @@ class TimetableDate
     {
         return $this->items;
     }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getHeaders(): ArrayCollection
-    {
-        return $this->headers;
-    }
-
-    /**
-     * @param ArrayCollection $headers
-     */
-    public function setHeaders(ArrayCollection $headers): void
-    {
-        $this->headers = $headers;
-    }
 }

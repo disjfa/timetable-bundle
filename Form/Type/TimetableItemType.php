@@ -27,12 +27,18 @@ class TimetableItemType extends AbstractType
             'label' => 'form.timetable_item.label.date_start',
             'constraints' => new NotBlank(),
             'minutes' => [0, 15, 30, 45],
+            'widget' => 'single_text',
+            'html5' => false,
+            'format' => 'yyyy-MM-dd HH:mm',
         ]);
 
         $builder->add('dateEnd', DateTimeType::class, [
             'label' => 'form.timetable_item.label.date_end',
             'constraints' => new NotBlank(),
             'minutes' => [0, 15, 30, 45],
+            'widget' => 'single_text',
+            'html5' => false,
+            'format' => 'yyyy-MM-dd HH:mm',
         ]);
     }
 

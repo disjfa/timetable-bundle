@@ -112,11 +112,4 @@ class TimetablePlace
     {
         return $this->items;
     }
-
-    public function itemsByDate(TimetableDate $date)
-    {
-        return $this->items->filter(function(TimetableItem $item) use ($date) {
-            return $item->getDate()->getId() === $date->getId();
-        });
-    }
 }
