@@ -25,14 +25,20 @@ class TimetablePresenter implements JsonSerializable
     private $places;
 
     /**
-     * TimetablePresenter constructor.
      * @param Timetable $timetable
+     * @param bool $deep
      */
-    public function __construct(Timetable $timetable)
+    public function __construct(Timetable $timetable, bool $deep = true)
     {
         $this->timetable = $timetable;
         $this->dates = [];
         $this->items = [];
+        $this->places = [];
+
+        if (false === $deep) {
+            return;
+        }
+
         foreach ($timetable->getDates() as $date) {
             $datePresenter = new DatePresenter($date);
             $this->dates[] = $datePresenter;

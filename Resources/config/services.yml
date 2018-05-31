@@ -1,17 +1,17 @@
 services:
-  _defaults:
-    autowire: true
-    autoconfigure: true
-    public: false
+    _defaults:
+        autowire: true
+        autoconfigure: false
+        public: false
 
-  # makes classes in src/ available to be used as services
-  # this creates a service per class whose id is the fully-qualified class name
-  Disjfa\TimetableBundle\:
-      resource: '../../*'
-      exclude: '../../{Entity,Migrations,Tests}'
+    Disjfa\TimetableBundle\:
+        resource: '../../*'
+        exclude: '../../{Entity,Migrations,Tests}'
 
-  # controllers are imported separately to make sure services can be injected
-  # as action arguments even if you don't extend any base controller class
-  Disjfa\TimetableBundle\Controller\:
-      resource: '../../Controller'
-      tags: ['controller.service_arguments']
+    Disjfa\TimetableBundle\Controller\:
+        resource: '../../Controller'
+        tags: ['controller.service_arguments']
+
+    krakaka:
+        autowire: true
+        class: Disjfa\TimetableBundle\Transformer\TimetableTransformer

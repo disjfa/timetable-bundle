@@ -5,11 +5,11 @@ namespace Disjfa\TimetableBundle\Controller;
 use Disjfa\TimetableBundle\Entity\Timetable;
 use Disjfa\TimetableBundle\Entity\TimetableDate;
 use Disjfa\TimetableBundle\Form\Type\TimetableDateType;
-use Disjfa\TimetableBundle\Form\Type\TimetableType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Route("/timetable/date")
@@ -18,6 +18,9 @@ class DateController extends Controller
 {
     /**
      * @Route("/create/{timetable}", name="disjfa_timetable_date_create")
+     * @param Request $request
+     * @param Timetable $timetable
+     * @return Response
      */
     public function createAction(Request $request, Timetable $timetable)
     {
@@ -29,6 +32,9 @@ class DateController extends Controller
 
     /**
      * @Route("/{timetableDate}/edit", name="disjfa_timetable_date_edit")
+     * @param Request $request
+     * @param TimetableDate $timetableDate
+     * @return Response
      */
     public function editAction(Request $request, TimetableDate $timetableDate)
     {
@@ -37,6 +43,11 @@ class DateController extends Controller
         return $this->handleForm($form, $request);
     }
 
+    /**
+     * @param FormInterface $form
+     * @param Request $request
+     * @return Response
+     */
     private function handleForm(FormInterface $form, Request $request)
     {
         $form->handleRequest($request);

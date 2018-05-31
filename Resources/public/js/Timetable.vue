@@ -2,12 +2,14 @@
   <div v-if="timetable">
     <h1>{{ timetable.title }}</h1>
 
+    <timetable-form :timetable-id="timetable.id"></timetable-form>
+
     <div v-for="date in timetable.dates">
       <h3>{{ date.title }}</h3>
       <div class="table-responsive">
         <div class="timetable py-3">
           <div v-for="header in date.headers" class="box" :style="headerStyle(header)">
-            {{ header.date.date }}
+            <timetable-time :date="header.date"></timetable-time>
           </div>
           <template v-for="(place, index) in timetable.places">
             <div class="box box-title" :style="placeStyle(index)">
@@ -17,7 +19,7 @@
               <div>
                 <strong>{{ item.title }}</strong>
               </div>
-              {{ item.dateStart.date }} - {{ item.dateEnd.date }}
+              <timetable-time :date="item.dateStart"></timetable-time> - <timetable-time :date="item.dateEnd"></timetable-time>
             </div>
           </template>
         </div>
@@ -28,9 +30,15 @@
 
 <script>
   import axios from 'axios';
+  import TimetableTime from './components/TimetableTime';
+  import TimetableForm from './components/TimetableForm';
 
   export default {
     name: 'timetable',
+    components: {
+      TimetableTime,
+      TimetableForm
+    },
     props: {
       timetableUrl: String
     },
@@ -49,20 +57,20 @@
     methods: {
       headerStyle(header) {
         return {
-          'grid-row': header.start + '/' + header.end,
-          'grid-column': 1,
+          'grid-row': 1,
+          'grid-column': header.start + '/' + header.end,
         }
       },
       placeStyle(index) {
         return {
-          'grid-row': 1,
-          'grid-column': index + 2,
+          'grid-row': index + 2,
+          'grid-column': 1,
         }
       },
       itemStyle(item, index) {
         return {
-          'grid-row': item.start + '/' + item.end,
-          'grid-column': index + 2,
+          'grid-row': index + 2,
+          'grid-column': item.start + '/' + item.end,
         }
       },
       itemInPlaceAndDate(item, place, date) {
