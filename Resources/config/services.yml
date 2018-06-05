@@ -5,13 +5,13 @@ services:
         public: false
 
     Disjfa\TimetableBundle\:
-        resource: '../../*'
-        exclude: '../../{Entity,Migrations,Tests}'
+        resource: './../../*'
+        exclude: './../../{Entity,Migrations,Tests}'
 
     Disjfa\TimetableBundle\Controller\:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
 
-    krakaka:
-        autowire: true
-        class: Disjfa\TimetableBundle\Transformer\TimetableTransformer
+    Disjfa\TimetableBundle\Security\:
+        resource: './../../Security/*'
+        tags: ['security.voter']

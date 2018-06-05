@@ -58,10 +58,6 @@ class TimetableController extends Controller
      */
     public function showAction(Timetable $timetable)
     {
-//        $item = new Item($timetable, $this->timetableTransformer);
-//        $manager = new Manager();
-//        dump( $manager->createData($item)->toArray());
-
         return $this->render('@DisjfaTimetable/Timetable/show.html.twig', [
             'timetable' => new TimetablePresenter($timetable),
         ]);

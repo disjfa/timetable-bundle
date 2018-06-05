@@ -1,17 +1,17 @@
 <template>
-  <div v-if="timetable">
-    <h1>{{ timetable.title }}</h1>
+  <div v-if="timetable.data">
+    <h1>{{ timetable.data.title }}</h1>
 
-    <timetable-form :timetable-id="timetable.id"></timetable-form>
+    <timetable-form :timetable="timetable.data"></timetable-form>
 
-    <div v-for="date in timetable.dates">
+    <div v-for="date in timetable.data.dates.data">
       <h3>{{ date.title }}</h3>
       <div class="table-responsive">
         <div class="timetable py-3">
           <div v-for="header in date.headers" class="box" :style="headerStyle(header)">
             <timetable-time :date="header.date"></timetable-time>
           </div>
-          <template v-for="(place, index) in timetable.places">
+          <template v-for="(place, index) in timetable.data.places.data">
             <div class="box box-title" :style="placeStyle(index)">
               {{place.title}}
             </div>
