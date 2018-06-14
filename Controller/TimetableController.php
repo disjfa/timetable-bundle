@@ -6,13 +6,9 @@ use Disjfa\TimetableBundle\Entity\Timetable;
 use Disjfa\TimetableBundle\Form\Type\TimetableType;
 use Disjfa\TimetableBundle\Timetable\TimetablePresenter;
 use Disjfa\TimetableBundle\Transformer\TimetableTransformer;
-use League\Fractal\Manager;
-use League\Fractal\Resource\Collection;
-use League\Fractal\Resource\Item;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -36,7 +32,9 @@ class TimetableController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('@DisjfaTimetable/Timetable/index.html.twig');
+        return $this->render('@DisjfaTimetable/Timetable/index.html.twig', [
+            'timetables' => $this->getDoctrine()->getRepository(Timetable::class)->findAll(),
+        ]);
     }
 
     /**

@@ -8,7 +8,6 @@ use League\Fractal\Resource\Collection;
 use League\Fractal\TransformerAbstract;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Csrf\CsrfTokenManager;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class TimetableTransformer extends TransformerAbstract
@@ -18,7 +17,8 @@ class TimetableTransformer extends TransformerAbstract
      */
     protected $defaultIncludes = [
         'dates',
-        'places'
+        'places',
+        'items'
     ];
 
     /**
@@ -26,13 +26,13 @@ class TimetableTransformer extends TransformerAbstract
      */
     private $authorizationCheker;
     /**
-     * @var TimetableDatesTransformer
+     * @var TimetableDateTransformer
      */
-    private $timetableDatesTransformer;
+    private $timetableDateTransformer;
     /**
-     * @var TimetablePlacesTransformer
+     * @var TimetablePlaceTransformer
      */
-    private $timetablePlacesTransformer;
+    private $timetablePlaceTransformer;
     /**
      * @var RouterInterface
      */
@@ -41,27 +41,34 @@ class TimetableTransformer extends TransformerAbstract
      * @var CsrfTokenManagerInterface
      */
     private $tokenManager;
+    /**
+     * @var TimetableItemTransformer
+     */
+    private $timetableItemTransformer;
 
     /**
      * TimetableTransformer constructor.
      * @param AuthorizationCheckerInterface $authorizationCheker
      * @param RouterInterface $router
-     * @param TimetableDatesTransformer $timetableDatesTransformer
-     * @param TimetablePlacesTransformer $timetablePlacesTransformer
+     * @param TimetableDateTransformer $timetableDateTransformer
+     * @param TimetablePlaceTransformer $timetablePlaceTransformer
+     * @param TimetableItemTransformer $timetableItemTransformer
      * @param CsrfTokenManagerInterface $tokenManager
      */
     public function __construct(
         AuthorizationCheckerInterface $authorizationCheker,
         RouterInterface $router,
-        TimetableDatesTransformer $timetableDatesTransformer,
-        TimetablePlacesTransformer $timetablePlacesTransformer,
+        TimetableDateTransformer $timetableDateTransformer,
+        TimetablePlaceTransformer $timetablePlaceTransformer,
+        TimetableItemTransformer $timetableItemTransformer,
         CsrfTokenManagerInterface $tokenManager
     )
     {
         $this->authorizationCheker = $authorizationCheker;
-        $this->timetableDatesTransformer = $timetableDatesTransformer;
-        $this->timetablePlacesTransformer = $timetablePlacesTransformer;
         $this->router = $router;
+        $this->timetableDateTransformer = $timetableDateTransformer;
+        $this->timetablePlaceTransformer = $timetablePlaceTransformer;
+        $this->timetableItemTransformer = $timetableItemTransformer;
         $this->tokenManager = $tokenManager;
     }
 
@@ -80,7 +87,7 @@ class TimetableTransformer extends TransformerAbstract
 
         $links = [];
         if ($this->authorizationCheker->isGranted(TimetableVoter::VIEW, $timetable)) {
-            $links['get_url'] = $this->router->generate('disjfa_timetable_api_timetable_get', [
+            $links['get_url'] = $this->router->generate('disjfa_timetable_api_timetable_show', [
                 'timetable' => $timetable->getId(),
             ]);
         }
@@ -102,7 +109,7 @@ class TimetableTransformer extends TransformerAbstract
     {
         $dates = $timetable->getDates();
 
-        return $this->collection($dates, $this->timetableDatesTransformer);
+        return $this->collection($dates, $this->timetableDateTransformer);
     }
 
     /**
@@ -113,8 +120,22 @@ class TimetableTransformer extends TransformerAbstract
     {
         $places = $timetable->getPlaces();
 
-        return $this->collection($places, $this->timetablePlacesTransformer);
+        return $this->collection($places, $this->timetablePlaceTransformer);
     }
 
+    /**
+     * @param Timetable $timetable
+     * @return Collection
+     */
+    public function includeItems(Timetable $timetable)
+    {
+        $dates = $timetable->getDates();
 
+        $items = [];
+        foreach ($dates as $date) {
+            $items = array_merge($items, $date->getItems()->toArray());
+        }
+
+        return $this->collection($items, $this->timetableItemTransformer);
+    }
 }

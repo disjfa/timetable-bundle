@@ -43,9 +43,9 @@ class TimetableVoter extends Voter
     {
         $user = $token->getUser();
 
-        if (!$user instanceof UserInterface) {
+        if (false === $user instanceof UserInterface) {
             // the user must be logged in; if not, deny access
-            return self::ACCESS_DENIED;
+            return false;
         }
 
         switch ($attribute) {
@@ -67,7 +67,7 @@ class TimetableVoter extends Voter
      */
     private function canView(Timetable $timetable, User $user)
     {
-        return self::ACCESS_GRANTED;
+        return false;
     }
 
     /**
@@ -77,7 +77,7 @@ class TimetableVoter extends Voter
      */
     private function canPatch(Timetable $timetable, User $user)
     {
-        return self::ACCESS_GRANTED;
+        return false;
     }
 
     /**
@@ -87,7 +87,7 @@ class TimetableVoter extends Voter
      */
     private function canPost(Timetable $timetable, User $user)
     {
-        return self::ACCESS_GRANTED;
+        return false;
     }
 
 }

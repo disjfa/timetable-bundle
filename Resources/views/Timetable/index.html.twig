@@ -2,18 +2,12 @@
 
 {% block body %}
     <div class="container">
-        <div class="table-responsive">
-            <div class="timetable">
-                <div class="box soapgirs">
-                    the soapgirs
-                </div>
-                <div class="box boom">
-                    fata boom
-                </div>
-                <div class="box c">
-                    cccccc
-                </div>
+        {% for timetable in timetables %}
+            <div>
+                <a href="{{ path('disjfa_timetable_timetable_show', {'timetable': timetable.id}) }}">
+                    {{ timetable.title }}
+                </a>
             </div>
-        </div>
+        {% endfor %}
     </div>
 {% endblock %}

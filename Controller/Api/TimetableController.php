@@ -56,19 +56,6 @@ class TimetableController extends Controller
     }
 
     /**
-     * @Route("/{timetable}", name="disjfa_timetable_api_timetable_get")
-     * @Method("GET")
-     * @param Timetable $timetable
-     * @return Response
-     */
-    public function getAction(Timetable $timetable)
-    {
-        return new JsonResponse([
-            'timetable' => new TimetablePresenter($timetable, false),
-        ]);
-    }
-
-    /**
      * @Route("/{timetable}", name="disjfa_timetable_api_timetable_patch")
      * @Method("PATCH")
      * @param Timetable $timetable
@@ -88,7 +75,9 @@ class TimetableController extends Controller
             $this->entityManager->persist($timetable);
             $this->entityManager->flush();
 
-            return new JsonResponse(null, 200);
+            $item = new Item($timetable, $this->timetableTransformer);
+            $manager = new Manager();
+            return new JsonResponse($manager->createData($item)->toArray());
         }
 
         return new JsonResponse([

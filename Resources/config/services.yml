@@ -15,3 +15,8 @@ services:
     Disjfa\TimetableBundle\Security\:
         resource: './../../Security/*'
         tags: ['security.voter']
+
+    Disjfa\TimetableBundle\Menu\TimetableMenuBuilder:
+        autowire: true
+        tags:
+          - { name: 'kernel.event_listener', event: 'glynn_site.menu_configure', method: 'onMenuConfigure' }
