@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block body %}
+{% block main %}
     <div class="container">
         <timetable timetable-url="{{ path('disjfa_timetable_api_timetable_show', {'timetable': timetable.timetable.id}) }}"></timetable>
 

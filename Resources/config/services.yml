@@ -19,4 +19,4 @@ services:
     Disjfa\TimetableBundle\Menu\TimetableMenuBuilder:
         autowire: true
         tags:
-          - { name: 'kernel.event_listener', event: 'glynn_site.menu_configure', method: 'onMenuConfigure' }
+          - { name: 'kernel.event_listener', event: 'site.menu_configure', method: 'onMenuConfigure' }
