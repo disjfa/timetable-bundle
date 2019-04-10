@@ -19,9 +19,11 @@ class ItemController extends Controller
 {
     /**
      * @Route("/create/{timetablePlace}/{timetableDate}", name="disjfa_timetable_item_create")
-     * @param Request $request
+     *
+     * @param Request        $request
      * @param TimetablePlace $timetablePlace
-     * @param TimetableDate $timetableDate
+     * @param TimetableDate  $timetableDate
+     *
      * @return Response
      */
     public function createAction(Request $request, TimetablePlace $timetablePlace, TimetableDate $timetableDate)
@@ -34,8 +36,10 @@ class ItemController extends Controller
 
     /**
      * @Route("/{timetableItem}/edit", name="disjfa_timetable_item_edit")
-     * @param Request $request
+     *
+     * @param Request       $request
      * @param TimetableItem $timetableItem
+     *
      * @return Response
      */
     public function editAction(Request $request, TimetableItem $timetableItem)
@@ -47,7 +51,8 @@ class ItemController extends Controller
 
     /**
      * @param FormInterface $form
-     * @param Request $request
+     * @param Request       $request
+     *
      * @return Response
      */
     private function handleForm(FormInterface $form, Request $request)

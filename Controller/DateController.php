@@ -18,8 +18,10 @@ class DateController extends Controller
 {
     /**
      * @Route("/create/{timetable}", name="disjfa_timetable_date_create")
-     * @param Request $request
+     *
+     * @param Request   $request
      * @param Timetable $timetable
+     *
      * @return Response
      */
     public function createAction(Request $request, Timetable $timetable)
@@ -32,8 +34,10 @@ class DateController extends Controller
 
     /**
      * @Route("/{timetableDate}/edit", name="disjfa_timetable_date_edit")
-     * @param Request $request
+     *
+     * @param Request       $request
      * @param TimetableDate $timetableDate
+     *
      * @return Response
      */
     public function editAction(Request $request, TimetableDate $timetableDate)
@@ -45,7 +49,8 @@ class DateController extends Controller
 
     /**
      * @param FormInterface $form
-     * @param Request $request
+     * @param Request       $request
+     *
      * @return Response
      */
     private function handleForm(FormInterface $form, Request $request)

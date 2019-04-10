@@ -32,7 +32,7 @@ class TimetablePlace
     private $timetable;
 
     /**
-     * @var integer
+     * @var int
      * @ORM\Column(name="seqnr", type="integer")
      */
     private $seqnr;

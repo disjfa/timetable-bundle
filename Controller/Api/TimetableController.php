@@ -5,7 +5,6 @@ namespace Disjfa\TimetableBundle\Controller\Api;
 use App\Form\Errors\Serializer;
 use Disjfa\TimetableBundle\Entity\Timetable;
 use Disjfa\TimetableBundle\Form\Type\TimetableType;
-use Disjfa\TimetableBundle\Timetable\TimetablePresenter;
 use Disjfa\TimetableBundle\Transformer\TimetableTransformer;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Fractal\Manager;
@@ -33,7 +32,8 @@ class TimetableController extends Controller
 
     /**
      * TimetableController constructor.
-     * @param TimetableTransformer $timetableTransformer
+     *
+     * @param TimetableTransformer   $timetableTransformer
      * @param EntityManagerInterface $entityManager
      */
     public function __construct(TimetableTransformer $timetableTransformer, EntityManagerInterface $entityManager)
@@ -45,20 +45,25 @@ class TimetableController extends Controller
     /**
      * @Route("/{timetable}/show", name="disjfa_timetable_api_timetable_show")
      * @Method("GET")
+     *
      * @param Timetable $timetable
+     *
      * @return Response
      */
     public function showAction(Timetable $timetable)
     {
         $item = new Item($timetable, $this->timetableTransformer);
         $manager = new Manager();
+
         return new JsonResponse($manager->createData($item)->toArray());
     }
 
     /**
      * @Route("/{timetable}", name="disjfa_timetable_api_timetable_patch")
      * @Method("PATCH")
+     *
      * @param Timetable $timetable
+     *
      * @return Response
      */
     public function patchAction(Timetable $timetable, Request $request)
@@ -77,6 +82,7 @@ class TimetableController extends Controller
 
             $item = new Item($timetable, $this->timetableTransformer);
             $manager = new Manager();
+
             return new JsonResponse($manager->createData($item)->toArray());
         }
 

@@ -14,6 +14,7 @@ class PlacePresenter implements JsonSerializable
 
     /**
      * PlacePresenter constructor.
+     *
      * @param TimetablePlace $place
      */
     public function __construct(TimetablePlace $timetablePlace)

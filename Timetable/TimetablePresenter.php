@@ -26,7 +26,7 @@ class TimetablePresenter implements JsonSerializable
 
     /**
      * @param Timetable $timetable
-     * @param bool $deep
+     * @param bool      $deep
      */
     public function __construct(Timetable $timetable, bool $deep = true)
     {

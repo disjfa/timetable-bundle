@@ -17,16 +17,17 @@ class TimetableVoter extends Voter
 
     /**
      * @param string $attribute
-     * @param mixed $subject
+     * @param mixed  $subject
+     *
      * @return bool
      */
     protected function supports($attribute, $subject)
     {
-        if (!in_array($attribute, array(self::VIEW, self::PATCH, self::POST))) {
+        if ( ! in_array($attribute, [self::VIEW, self::PATCH, self::POST])) {
             return false;
         }
 
-        if (!$subject instanceof Timetable) {
+        if ( ! $subject instanceof Timetable) {
             return false;
         }
 
@@ -34,9 +35,10 @@ class TimetableVoter extends Voter
     }
 
     /**
-     * @param string $attribute
-     * @param Timetable $timetable
+     * @param string         $attribute
+     * @param Timetable      $timetable
      * @param TokenInterface $token
+     *
      * @return bool
      */
     protected function voteOnAttribute($attribute, $timetable, TokenInterface $token)
@@ -62,7 +64,8 @@ class TimetableVoter extends Voter
 
     /**
      * @param Timetable $timetable
-     * @param User $user
+     * @param User      $user
+     *
      * @return bool
      */
     private function canView(Timetable $timetable, User $user)
@@ -72,7 +75,8 @@ class TimetableVoter extends Voter
 
     /**
      * @param Timetable $timetable
-     * @param User $user
+     * @param User      $user
+     *
      * @return bool
      */
     private function canPatch(Timetable $timetable, User $user)
@@ -82,12 +86,12 @@ class TimetableVoter extends Voter
 
     /**
      * @param Timetable $timetable
-     * @param User $user
+     * @param User      $user
+     *
      * @return bool
      */
     private function canPost(Timetable $timetable, User $user)
     {
         return false;
     }
-
 }

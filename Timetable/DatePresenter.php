@@ -28,6 +28,7 @@ class DatePresenter implements JsonSerializable
 
     /**
      * DatePresenter constructor.
+     *
      * @param TimetableDate $timetableDate
      */
     public function __construct(TimetableDate $timetableDate)
@@ -77,8 +78,8 @@ class DatePresenter implements JsonSerializable
 
         $this->dateStart->setTime($this->dateStart->format('G'), 0);
         $this->dateEnd = clone $this->dateEnd;
-        if ((int)$this->dateEnd->format('i') !== 0) {
-            $this->dateEnd->setTime((int)$this->dateEnd->format('G') + 1, 0);
+        if (0 !== (int) $this->dateEnd->format('i')) {
+            $this->dateEnd->setTime((int) $this->dateEnd->format('G') + 1, 0);
         }
     }
 
@@ -132,5 +133,4 @@ class DatePresenter implements JsonSerializable
     {
         return $this->headers;
     }
-
 }

@@ -14,7 +14,7 @@ class TimetableType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -39,7 +39,7 @@ class TimetableType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Timetable::class,
-            'translation_domain' => 'timetable'
+            'translation_domain' => 'timetable',
         ]);
     }
 }

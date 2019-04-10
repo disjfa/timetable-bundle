@@ -18,7 +18,7 @@ class TimetableTransformer extends TransformerAbstract
     protected $defaultIncludes = [
         'dates',
         'places',
-        'items'
+        'items',
     ];
 
     /**
@@ -48,12 +48,13 @@ class TimetableTransformer extends TransformerAbstract
 
     /**
      * TimetableTransformer constructor.
+     *
      * @param AuthorizationCheckerInterface $authorizationCheker
-     * @param RouterInterface $router
-     * @param TimetableDateTransformer $timetableDateTransformer
-     * @param TimetablePlaceTransformer $timetablePlaceTransformer
-     * @param TimetableItemTransformer $timetableItemTransformer
-     * @param CsrfTokenManagerInterface $tokenManager
+     * @param RouterInterface               $router
+     * @param TimetableDateTransformer      $timetableDateTransformer
+     * @param TimetablePlaceTransformer     $timetablePlaceTransformer
+     * @param TimetableItemTransformer      $timetableItemTransformer
+     * @param CsrfTokenManagerInterface     $tokenManager
      */
     public function __construct(
         AuthorizationCheckerInterface $authorizationCheker,
@@ -62,8 +63,7 @@ class TimetableTransformer extends TransformerAbstract
         TimetablePlaceTransformer $timetablePlaceTransformer,
         TimetableItemTransformer $timetableItemTransformer,
         CsrfTokenManagerInterface $tokenManager
-    )
-    {
+    ) {
         $this->authorizationCheker = $authorizationCheker;
         $this->router = $router;
         $this->timetableDateTransformer = $timetableDateTransformer;
@@ -74,6 +74,7 @@ class TimetableTransformer extends TransformerAbstract
 
     /**
      * @param Timetable $timetable
+     *
      * @return array
      */
     public function transform(Timetable $timetable)
@@ -98,11 +99,13 @@ class TimetableTransformer extends TransformerAbstract
         }
 
         $data['links'] = $links;
+
         return $data;
     }
 
     /**
      * @param Timetable $timetable
+     *
      * @return Collection
      */
     public function includeDates(Timetable $timetable)
@@ -114,6 +117,7 @@ class TimetableTransformer extends TransformerAbstract
 
     /**
      * @param Timetable $timetable
+     *
      * @return Collection
      */
     public function includePlaces(Timetable $timetable)
@@ -125,6 +129,7 @@ class TimetableTransformer extends TransformerAbstract
 
     /**
      * @param Timetable $timetable
+     *
      * @return Collection
      */
     public function includeItems(Timetable $timetable)

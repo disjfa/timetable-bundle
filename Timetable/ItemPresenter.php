@@ -22,6 +22,7 @@ class ItemPresenter implements JsonSerializable
 
     /**
      * ItemPresenter constructor.
+     *
      * @param TimetableItem $item
      * @param DatePresenter $datePresenter
      */

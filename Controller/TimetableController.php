@@ -39,7 +39,9 @@ class TimetableController extends Controller
 
     /**
      * @Route("/create", name="disjfa_timetable_timetable_create")
+     *
      * @param Request $request
+     *
      * @return Response
      */
     public function createAction(Request $request)
@@ -51,7 +53,9 @@ class TimetableController extends Controller
 
     /**
      * @Route("/{timetable}/show", name="disjfa_timetable_timetable_show")
+     *
      * @param Timetable $timetable
+     *
      * @return Response
      */
     public function showAction(Timetable $timetable)
@@ -63,8 +67,10 @@ class TimetableController extends Controller
 
     /**
      * @Route("/{timetable}/edit", name="disjfa_timetable_timetable_edit")
-     * @param Request $request
+     *
+     * @param Request   $request
      * @param Timetable $timetable
+     *
      * @return Response
      */
     public function editAction(Request $request, Timetable $timetable)
@@ -76,7 +82,8 @@ class TimetableController extends Controller
 
     /**
      * @param FormInterface $form
-     * @param Request $request
+     * @param Request       $request
+     *
      * @return Response
      */
     private function handleForm(FormInterface $form, Request $request)

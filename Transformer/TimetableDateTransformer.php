@@ -20,8 +20,9 @@ class TimetableDateTransformer extends TransformerAbstract
 
     /**
      * TimetableDateTransformer constructor.
+     *
      * @param AuthorizationCheckerInterface $authorizationCheker
-     * @param DatesMutator $datesMutator
+     * @param DatesMutator                  $datesMutator
      */
     public function __construct(AuthorizationCheckerInterface $authorizationCheker, DatesMutator $datesMutator)
     {
@@ -31,6 +32,7 @@ class TimetableDateTransformer extends TransformerAbstract
 
     /**
      * @param TimetableDate $timetableDate
+     *
      * @return array
      */
     public function transform(TimetableDate $timetableDate)
