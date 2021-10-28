@@ -6,6 +6,7 @@ use Disjfa\TimetableBundle\Entity\TimetableDate;
 use Disjfa\TimetableBundle\Entity\TimetableItem;
 use Disjfa\TimetableBundle\Entity\TimetablePlace;
 use Disjfa\TimetableBundle\Form\Type\TimetableItemType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormInterface;
@@ -15,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @Route("/timetable/item")
  */
-class ItemController extends Controller
+class ItemController extends AbstractController
 {
     /**
      * @Route("/create/{timetablePlace}/{timetableDate}", name="disjfa_timetable_item_create")

@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Item;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @Route("/api/timetable")
  */
-class TimetableController extends Controller
+class TimetableController extends AbstractController
 {
     /**
      * @var TimetableTransformer

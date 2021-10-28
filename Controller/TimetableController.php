@@ -6,6 +6,7 @@ use Disjfa\TimetableBundle\Entity\Timetable;
 use Disjfa\TimetableBundle\Form\Type\TimetableType;
 use Disjfa\TimetableBundle\Timetable\TimetablePresenter;
 use Disjfa\TimetableBundle\Transformer\TimetableTransformer;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormInterface;
@@ -15,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @Route("/timetable")
  */
-class TimetableController extends Controller
+class TimetableController extends AbstractController
 {
     /**
      * @var TimetableTransformer

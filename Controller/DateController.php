@@ -5,6 +5,7 @@ namespace Disjfa\TimetableBundle\Controller;
 use Disjfa\TimetableBundle\Entity\Timetable;
 use Disjfa\TimetableBundle\Entity\TimetableDate;
 use Disjfa\TimetableBundle\Form\Type\TimetableDateType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormInterface;
@@ -14,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @Route("/timetable/date")
  */
-class DateController extends Controller
+class DateController extends AbstractController
 {
     /**
      * @Route("/create/{timetable}", name="disjfa_timetable_date_create")
