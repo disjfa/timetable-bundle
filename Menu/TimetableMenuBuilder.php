@@ -3,7 +3,7 @@
 namespace Disjfa\TimetableBundle\Menu;
 
 use Disjfa\MenuBundle\Menu\ConfigureMenuEvent;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TimetableMenuBuilder
 {
