@@ -1,7 +1,11 @@
-{% extends "base.html.twig" %}
+{% extends "@DisjfaTimetable/base.html.twig" %}
 
-{% block main %}
+{% block _disjfa_timetable_content %}
     <div class="container">
+        <h1>Timetables</h1>
+        <a href="{{ path('disjfa_timetable_timetable_create') }}" class="btn btn-primary">
+            Create new
+        </a>
         {% for timetable in timetables %}
             <div>
                 <a href="{{ path('disjfa_timetable_timetable_show', {'timetable': timetable.id}) }}">

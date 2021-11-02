@@ -47,6 +47,16 @@ class TimetableDate
     private $dateAt;
 
     /**
+     * @var DateTime
+     */
+    private $startDate;
+
+    /**
+     * @var DateTime
+     */
+    private $endDate;
+
+    /**
      * @var ArrayCollection
      */
     private $headers;
@@ -119,5 +129,80 @@ class TimetableDate
     public function getItems()
     {
         return $this->items;
+    }
+
+    public function getStartDate(): DateTime
+    {
+        if (null !== $this->startDate) {
+            return $this->startDate;
+        }
+
+        $startDate = null;
+        if (0 === $this->items->count()) {
+            $startDate = $this->dateAt;
+        }
+
+        foreach ($this->items as $item) {
+            if (null === $startDate) {
+                $startDate = $item->getDateStart();
+            }
+
+            if ($item->getDateStart() < $startDate) {
+                $startDate = $item->getDateStart();
+            }
+        }
+
+        $this->startDate = $startDate;
+
+        return $this->startDate;
+    }
+
+    public function getEndDate(): DateTime
+    {
+        if (null !== $this->endDate) {
+            return $this->endDate;
+        }
+
+        $endDate = null;
+        if (0 === $this->items->count()) {
+            $endDate = $this->dateAt;
+        }
+
+        foreach ($this->items as $item) {
+            if (null === $endDate) {
+                $endDate = $item->getDateStart();
+            }
+
+            if ($item->getDateEnd() > $endDate) {
+                $endDate = $item->getDateEnd();
+            }
+        }
+
+        $this->endDate = $endDate;
+
+        return $this->endDate;
+    }
+
+    public function getHeaders()
+    {
+        $startDate = clone $this->getStartDate();
+        $endDate = clone $this->getEndDate();
+
+        $minutes = 60 * 15;
+        $timeStart = $startDate->getTimestamp();
+
+        $headers = [];
+        while ($startDate < $endDate) {
+            $start = ($startDate->getTimestamp() - $timeStart) / $minutes + 2;
+            $headers[] = [
+                'date' => clone $startDate,
+                'start' => $start,
+                'end' => $start + 4,
+            ];
+
+            $startDate->modify('+1 hour');
+        }
+
+        return $headers;
     }
 }

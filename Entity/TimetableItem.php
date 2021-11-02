@@ -50,6 +50,14 @@ class TimetableItem
      * @ORM\Column(name="date_end", type="datetime")
      */
     private $dateEnd;
+    /**
+     * @var int
+     */
+    private $start;
+    /**
+     * @var int
+     */
+    private $end;
 
     public function __construct(TimetablePlace $place, TimetableDate $date)
     {
@@ -145,5 +153,29 @@ class TimetableItem
     public function setDateEnd(DateTime $dateEnd): void
     {
         $this->dateEnd = $dateEnd;
+    }
+
+    public function getStart(): int
+    {
+        if (null !== $this->start) {
+            return $this->start;
+        }
+
+        $minutes = 60 * 15;
+        $startDate = $this->getDate()->getStartDate();
+        $this->start = floor(($this->dateStart->getTimestamp() - $startDate->getTimestamp()) / $minutes + 2);
+        return $this->start;
+    }
+
+    public function getEnd(): int
+    {
+        if (null !== $this->end) {
+            return $this->end;
+        }
+
+        $minutes = 60 * 15;
+        $startDate = $this->getDate()->getStartDate();
+        $this->end = floor(($this->dateEnd->getTimestamp() - $startDate->getTimestamp()) / $minutes + 2);
+        return $this->end;
     }
 }

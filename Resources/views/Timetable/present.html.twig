@@ -1,0 +1,74 @@
+{% extends "@DisjfaTimetable/base.html.twig" %}
+
+{% block _disjfa_timetable_content %}
+    <div class="container">
+        <h1>{{ timetable.timetable.title }}
+            <a href="{{ path('disjfa_timetable_timetable_edit', {'timetable': timetable.timetable.id}) }}">
+                <i class="fas fa-edit"></i>
+            </a>
+        </h1>
+        <div class="btn-group">
+            <a href="{{ path('disjfa_timetable_date_create', {'timetable': timetable.timetable.id}) }}" class="btn btn-outline-primary">
+                Add date
+            </a>
+            <a href="{{ path('disjfa_timetable_place_create', {'timetable': timetable.timetable.id}) }}" class="btn btn-outline-primary">
+                Add place
+            </a>
+        </div>
+        {% for date in timetable.dates %}
+            <div class="py-3">
+                <h3>
+                    {{ date.timetableDate.title }}
+                    <a href="{{ path('disjfa_timetable_date_edit', {'timetableDate': date.timetableDate.id}) }}">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </h3>
+                {{ date.timetableDate.dateAt | date }}
+                <div class="table-responsive">
+                    <div class="timetable py-3">
+                        {% for header in date.headers %}
+                            <div class="box" style="grid-row: {{ header.start }} / {{ header.end }}; grid-column: 1;">
+                                {{ header.date | date('G:i') }}
+                            </div>
+                        {% endfor %}
+                        {% for place in timetable.places %}
+                            {% set row = loop.index + 1 %}
+                            <div class="box box-title" style="grid-row: 1; grid-column: {{ row }};">
+                                <div>
+                                    {{ place.timetablePlace.title }}
+                                    <a href="{{ path('disjfa_timetable_place_edit', {'timetablePlace': place.timetablePlace.id}) }}">
+                                        <i class="fas fa-edit"></i>
+                                        edit
+                                    </a>
+                                </div>
+                                <a href="{{ path('disjfa_timetable_item_create', {'timetableDate': date.timetableDate.id, 'timetablePlace': place.timetablePlace.id}) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-plus"></i>
+                                    add
+                                </a>
+                            </div>
+                            {% for item in timetable.items %}
+                                {% if item.item.place.id == place.timetablePlace.id and item.item.date.id == date.timetableDate.id %}
+                                    <div class="box" style="grid-row: {{ item.start }} / {{ item.end }}; grid-column: {{ row }};">
+                                        <h6>
+                                            {{ item.item.title }}
+                                            <a href="{{ path('disjfa_timetable_item_edit', {'timetableItem': item.item.id}) }}">
+                                                <i class="fas fa-edit"></i>
+                                                edit
+                                            </a>
+                                        </h6>
+
+                                        <br>
+                                        <small class="text-muted">
+                                            {{ item.item.dateStart | date('H:i') }}
+                                            / {{ item.item.dateEnd | date('H:i') }}
+                                        </small>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

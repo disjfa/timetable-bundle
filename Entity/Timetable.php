@@ -47,6 +47,24 @@ class Timetable
      */
     private $dates;
 
+    /**
+     * @var string|null
+     * @ORM\Column(name="body_bg", type="string", nullable=true)
+     */
+    private $bodyBg;
+
+    /**
+     * @var string|null
+     * @ORM\Column(name="header_bg", type="string", nullable=true)
+     */
+    private $headerBg;
+
+    /**
+     * @var string|null
+     * @ORM\Column(name="box_bg", type="string", nullable=true)
+     */
+    private $boxBg;
+
     public function __construct()
     {
         $this->side = 'horizontal';
@@ -106,5 +124,53 @@ class Timetable
     public function setSide(string $side): void
     {
         $this->side = $side;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBodyBg(): ?string
+    {
+        return $this->bodyBg;
+    }
+
+    /**
+     * @param string|null $bodyBg
+     */
+    public function setBodyBg(?string $bodyBg): void
+    {
+        $this->bodyBg = $bodyBg;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getHeaderBg(): ?string
+    {
+        return $this->headerBg;
+    }
+
+    /**
+     * @param string|null $headerBg
+     */
+    public function setHeaderBg(?string $headerBg): void
+    {
+        $this->headerBg = $headerBg;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBoxBg(): ?string
+    {
+        return $this->boxBg;
+    }
+
+    /**
+     * @param string|null $boxBg
+     */
+    public function setBoxBg(?string $boxBg): void
+    {
+        $this->boxBg = $boxBg;
     }
 }

@@ -1,18 +1,30 @@
+:root {
+  --timetable-gap: #{$spacer/2};
+  --timetable-box-background-color: #{$dark};
+  --timetable-box-color: #{$light};
+  --timetable-box-border-radius: #{$border-radius};
+  --timetable-box-padding: #{$spacer/2};
+  --timetable-box-min-width: 100px;
+  --timetable-box-title-min-width: 250px;
+  --timetable-box-title-background-color: #{$light};
+  --timetable-box-title-color: #{$dark};
+}
+
 .timetable {
   display: grid;
-  grid-gap: $spacer/2;
+  grid-gap: var(--timetable-gap);
 
   .box {
-    background-color: $dark;
-    color: $light;
-    border-radius: $border-radius;
-    padding: $spacer/2;
-    min-width: 100px;
+    background-color: var(--timetable-box-background-color);
+    color: var(--timetable-box-color);
+    border-radius: var(--timetable-box-border-radius);
+    padding: var(--timetable-box-padding);
+    min-width: var(--timetable-box-min-width);
   }
 
   .box-title {
-    min-width: 250px;
-    background-color: $light;
-    color: $dark;
+    min-width: var(--timetable-box-title-min-width);
+    background-color: var(--timetable-box-title-background-color);
+    color: var(--timetable-box-title-color);
   }
 }

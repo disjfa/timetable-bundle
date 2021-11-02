@@ -16,6 +16,10 @@ services:
         resource: './../../Security/*'
         tags: ['security.voter']
 
+    Disjfa\TimetableBundle\Twig\:
+        resource: './../../Twig/*'
+        tags: ['twig.extension']
+
     Disjfa\TimetableBundle\Menu\TimetableMenuBuilder:
         autowire: true
         tags:

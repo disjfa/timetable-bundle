@@ -4,30 +4,19 @@ namespace Disjfa\TimetableBundle\Controller;
 
 use Disjfa\TimetableBundle\Entity\Timetable;
 use Disjfa\TimetableBundle\Form\Type\TimetableType;
-use Disjfa\TimetableBundle\Timetable\TimetablePresenter;
-use Disjfa\TimetableBundle\Transformer\TimetableTransformer;
+use Spatie\Color\Contrast;
+use Spatie\Color\Hex;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/timetable")
  */
 class TimetableController extends AbstractController
 {
-    /**
-     * @var TimetableTransformer
-     */
-    private $timetableTransformer;
-
-    public function __construct(TimetableTransformer $timetableTransformer)
-    {
-        $this->timetableTransformer = $timetableTransformer;
-    }
-
     /**
      * @Route("", name="disjfa_timetable_timetable_index")
      */
@@ -62,14 +51,14 @@ class TimetableController extends AbstractController
     public function showAction(Timetable $timetable)
     {
         return $this->render('@DisjfaTimetable/Timetable/show.html.twig', [
-            'timetable' => new TimetablePresenter($timetable),
+            'timetable' => $timetable,
         ]);
     }
 
     /**
      * @Route("/{timetable}/edit", name="disjfa_timetable_timetable_edit")
      *
-     * @param Request   $request
+     * @param Request $request
      * @param Timetable $timetable
      *
      * @return Response
@@ -83,7 +72,7 @@ class TimetableController extends AbstractController
 
     /**
      * @param FormInterface $form
-     * @param Request       $request
+     * @param Request $request
      *
      * @return Response
      */
