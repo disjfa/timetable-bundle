@@ -7,25 +7,17 @@ use Disjfa\TimetableBundle\Entity\TimetableDate;
 use Disjfa\TimetableBundle\Form\Type\TimetableDateType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/timetable/date")
- */
+
+#[Route('/timetable/date')]
 class DateController extends AbstractController
 {
-    /**
-     * @Route("/create/{timetable}", name="disjfa_timetable_date_create")
-     *
-     * @param Request   $request
-     * @param Timetable $timetable
-     *
-     * @return Response
-     */
-    public function createAction(Request $request, Timetable $timetable)
+    #[Route('/create/{timetable}', name: 'disjfa_timetable_date_create', methods: ['GET', 'POST'])]
+    public function createAction(Request $request, Timetable $timetable): Response
     {
         $timetableDate = new TimetableDate($timetable);
         $form = $this->createForm(TimetableDateType::class, $timetableDate);
@@ -33,28 +25,15 @@ class DateController extends AbstractController
         return $this->handleForm($form, $request);
     }
 
-    /**
-     * @Route("/{timetableDate}/edit", name="disjfa_timetable_date_edit")
-     *
-     * @param Request       $request
-     * @param TimetableDate $timetableDate
-     *
-     * @return Response
-     */
-    public function editAction(Request $request, TimetableDate $timetableDate)
+    #[Route('/{timetable}/edit', name: 'disjfa_timetable_date_edit', methods: ['GET', 'POST'])]
+    public function editAction(Request $request, TimetableDate $timetableDate): Response
     {
         $form = $this->createForm(TimetableDateType::class, $timetableDate);
 
         return $this->handleForm($form, $request);
     }
 
-    /**
-     * @param FormInterface $form
-     * @param Request       $request
-     *
-     * @return Response
-     */
-    private function handleForm(FormInterface $form, Request $request)
+    private function handleForm(FormInterface $form, Request $request): Response
     {
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

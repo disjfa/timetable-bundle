@@ -6,49 +6,47 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="timetable_item")
- */
+#[ORM\Table(name: 'timetable_item')]
+#[ORM\Entity]
 class TimetableItem
 {
     /**
      * @var string
-     * @ORM\Id()
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private $id;
 
     /**
      * @var string
-     * @ORM\Column(name="title", type="string")
      */
+    #[ORM\Column(name: 'title', type: 'string')]
     private $title;
 
     /**
      * @var TimetablePlace
-     * @ORM\ManyToOne(targetEntity="Disjfa\TimetableBundle\Entity\TimetablePlace", inversedBy="items")
      */
+    #[ORM\ManyToOne(targetEntity: \Disjfa\TimetableBundle\Entity\TimetablePlace::class, inversedBy: 'items')]
     private $place;
 
     /**
      * @var TimetableDate
-     * @ORM\ManyToOne(targetEntity="Disjfa\TimetableBundle\Entity\TimetableDate", inversedBy="items")
      */
+    #[ORM\ManyToOne(targetEntity: \Disjfa\TimetableBundle\Entity\TimetableDate::class, inversedBy: 'items')]
     private $date;
 
     /**
      * @var DateTime
-     * @ORM\Column(name="date_start", type="datetime")
      */
+    #[ORM\Column(name: 'date_start', type: 'datetime')]
     private $dateStart;
 
     /**
      * @var DateTime
-     * @ORM\Column(name="date_end", type="datetime")
      */
+    #[ORM\Column(name: 'date_end', type: 'datetime')]
     private $dateEnd;
     /**
      * @var int

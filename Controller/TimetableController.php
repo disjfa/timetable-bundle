@@ -4,6 +4,7 @@ namespace Disjfa\TimetableBundle\Controller;
 
 use Disjfa\TimetableBundle\Entity\Timetable;
 use Disjfa\TimetableBundle\Form\Type\TimetableType;
+use Doctrine\Persistence\ManagerRegistry;
 use Spatie\Color\Contrast;
 use Spatie\Color\Hex;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,28 +13,31 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/timetable")
- */
+#[Route(path: '/timetable')]
 class TimetableController extends AbstractController
 {
-    /**
-     * @Route("", name="disjfa_timetable_timetable_index")
-     */
+    private ManagerRegistry $registry;
+
+    public function __construct(ManagerRegistry $registry)
+    {
+        $this->registry = $registry;
+    }
+
+
+    #[Route(path: '', name: 'disjfa_timetable_timetable_index')]
     public function indexAction()
     {
         return $this->render('@DisjfaTimetable/Timetable/index.html.twig', [
-            'timetables' => $this->getDoctrine()->getRepository(Timetable::class)->findAll(),
+            'timetables' => $this->registry->getRepository(Timetable::class)->findAll(),
         ]);
     }
 
     /**
-     * @Route("/create", name="disjfa_timetable_timetable_create")
      *
      * @param Request $request
-     *
      * @return Response
      */
+    #[Route(path: '/create', name: 'disjfa_timetable_timetable_create')]
     public function createAction(Request $request)
     {
         $form = $this->createForm(TimetableType::class, new Timetable());
@@ -42,12 +46,11 @@ class TimetableController extends AbstractController
     }
 
     /**
-     * @Route("/{timetable}/show", name="disjfa_timetable_timetable_show")
      *
      * @param Timetable $timetable
-     *
      * @return Response
      */
+    #[Route(path: '/{timetable}/show', name: 'disjfa_timetable_timetable_show')]
     public function showAction(Timetable $timetable)
     {
         return $this->render('@DisjfaTimetable/Timetable/show.html.twig', [
@@ -56,13 +59,12 @@ class TimetableController extends AbstractController
     }
 
     /**
-     * @Route("/{timetable}/edit", name="disjfa_timetable_timetable_edit")
      *
      * @param Request $request
      * @param Timetable $timetable
-     *
      * @return Response
      */
+    #[Route(path: '/{timetable}/edit', name: 'disjfa_timetable_timetable_edit')]
     public function editAction(Request $request, Timetable $timetable)
     {
         $form = $this->createForm(TimetableType::class, $timetable);
@@ -83,7 +85,7 @@ class TimetableController extends AbstractController
             /** @var Timetable $timetable */
             $timetable = $form->getData();
 
-            $entitymanager = $this->getDoctrine()->getManager();
+            $entitymanager = $this->registry->getManager();
             $entitymanager->persist($timetable);
             $entitymanager->flush();
 

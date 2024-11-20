@@ -1,16 +1,18 @@
 services:
     _defaults:
         autowire: true
-        autoconfigure: false
-        public: false
+        autoconfigure: true
+        public: true
 
     Disjfa\TimetableBundle\:
         resource: './../../*'
         exclude: './../../{Entity,Migrations,Tests}'
 
     Disjfa\TimetableBundle\Controller\:
-        resource: '../../Controller'
+        resource: '../../Controller/*'
         tags: ['controller.service_arguments']
+        calls:
+            - [setContainer, ['@service_container']]
 
     Disjfa\TimetableBundle\Security\:
         resource: './../../Security/*'

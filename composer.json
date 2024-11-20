@@ -6,8 +6,7 @@
   ],
   "type": "symfony-bundle",
   "require": {
-    "symfony/orm-pack": "*",
-    "sensio/framework-extra-bundle": "*"
+    "symfony/orm-pack": "*"
   },
   "license": "MIT",
   "authors": [

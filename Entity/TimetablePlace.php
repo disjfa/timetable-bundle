@@ -6,43 +6,41 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="timetable_place")
- */
+#[ORM\Table(name: 'timetable_place')]
+#[ORM\Entity]
 class TimetablePlace
 {
     /**
      * @var string
-     * @ORM\Id()
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private $id;
 
     /**
      * @var string
-     * @ORM\Column(name="title", type="string")
      */
+    #[ORM\Column(name: 'title', type: 'string')]
     private $title;
 
     /**
      * @var Timetable
-     * @ORM\ManyToOne(targetEntity="Disjfa\TimetableBundle\Entity\Timetable", inversedBy="places")
      */
+    #[ORM\ManyToOne(targetEntity: \Disjfa\TimetableBundle\Entity\Timetable::class, inversedBy: 'places')]
     private $timetable;
 
     /**
      * @var int
-     * @ORM\Column(name="seqnr", type="integer")
      */
+    #[ORM\Column(name: 'seqnr', type: 'integer')]
     private $seqnr;
 
     /**
      * @var TimetableItem[]|ArrayCollection
-     * @ORM\OneToMany(targetEntity="Disjfa\TimetableBundle\Entity\TimetableItem", mappedBy="place")
      */
+    #[ORM\OneToMany(targetEntity: \Disjfa\TimetableBundle\Entity\TimetableItem::class, mappedBy: 'place')]
     private $items;
 
     public function __construct(Timetable $timetable)

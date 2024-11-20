@@ -6,63 +6,61 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="timetable")
- */
+#[ORM\Table(name: 'timetable')]
+#[ORM\Entity]
 class Timetable
 {
     /**
      * @var string
-     * @ORM\Id()
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private $id;
 
     /**
      * @var string
-     * @ORM\Column(name="title", type="string")
      */
+    #[ORM\Column(name: 'title', type: 'string')]
     private $title;
 
     /**
      * @var string
-     * @ORM\Column(name="side", type="string")
      */
+    #[ORM\Column(name: 'side', type: 'string')]
     private $side;
 
     /**
      * @var TimetablePlace[]|ArrayCollection
-     * @ORM\OneToMany(targetEntity="Disjfa\TimetableBundle\Entity\TimetablePlace", mappedBy="timetable")
-     * @ORM\OrderBy({"seqnr" = "ASC"})
      */
+    #[ORM\OneToMany(targetEntity: TimetablePlace::class, mappedBy: 'timetable')]
+    #[ORM\OrderBy(['seqnr' => 'ASC'])]
     private $places;
 
     /**
      * @var TimetableDate[]|ArrayCollection
-     * @ORM\OneToMany(targetEntity="Disjfa\TimetableBundle\Entity\TimetableDate", mappedBy="timetable")
-     * @ORM\OrderBy({"dateAt" = "ASC"})
      */
+    #[ORM\OneToMany(targetEntity: TimetableDate::class, mappedBy: 'timetable')]
+    #[ORM\OrderBy(['dateAt' => 'ASC'])]
     private $dates;
 
     /**
      * @var string|null
-     * @ORM\Column(name="body_bg", type="string", nullable=true)
      */
+    #[ORM\Column(name: 'body_bg', type: 'string', nullable: true)]
     private $bodyBg;
 
     /**
      * @var string|null
-     * @ORM\Column(name="header_bg", type="string", nullable=true)
      */
+    #[ORM\Column(name: 'header_bg', type: 'string', nullable: true)]
     private $headerBg;
 
     /**
      * @var string|null
-     * @ORM\Column(name="box_bg", type="string", nullable=true)
      */
+    #[ORM\Column(name: 'box_bg', type: 'string', nullable: true)]
     private $boxBg;
 
     public function __construct()

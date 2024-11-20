@@ -15,7 +15,7 @@ class TimetableTransformer extends TransformerAbstract
     /**
      * @var array
      */
-    protected $defaultIncludes = [
+    protected array $defaultIncludes = [
         'dates',
         'places',
         'items',
