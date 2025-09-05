@@ -1,23 +1,30 @@
 {
-  "name": "disjfa/timetable-bundle",
-  "description": "Timetable bundle for symfony, can also be use in glynn-admin-symfony",
-  "keywords": [
-    "puzzle"
-  ],
-  "type": "symfony-bundle",
-  "require": {
-    "symfony/orm-pack": "*"
-  },
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "disjfa",
-      "email": "disjfa@disjfa.nl"
+    "name": "disjfa/timetable-bundle",
+    "description": "Timetable bundle for symfony, can also be use in glynn-admin-symfony",
+    "keywords": [
+        "puzzle"
+    ],
+    "type": "symfony-bundle",
+    "require": {
+        "league/fractal": "^0.20",
+        "symfony/form": "^6.0|^7.0",
+        "symfony/orm-pack": "*",
+        "symfony/security-bundle": "^6.0|^7.0",
+        "symfony/security-csrf": "^6.0|^7.0",
+        "symfony/translation": "^6.0|^7.0",
+        "symfony/twig-bundle": "^6.0|^7.0",
+        "symfony/uid": "^6.0|^7.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "disjfa",
+            "email": "disjfa@disjfa.nl"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Disjfa\\TimetableBundle\\": ""
+        }
     }
-  ],
-  "autoload": {
-    "psr-4": {
-      "Disjfa\\TimetableBundle\\": ""
-    }
-  }
 }
