@@ -6,6 +6,7 @@ use Disjfa\TimetableBundle\Entity\Timetable;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,15 +14,19 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class TimetableType extends AbstractType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('title', TextType::class, [
             'label' => 'form.timetable.label.title',
             'constraints' => new NotBlank(),
+        ]);
+
+        $builder->add('about', TextareaType::class, [
+            'required' => false,
+            'label' => 'form.timetable.label.about',
+            'attr' => [
+                'data-controller' => 'easymde',
+            ],
         ]);
 
         $builder->add('bodyBg', ColorType::class, [
@@ -45,9 +50,6 @@ class TimetableType extends AbstractType
         ]);
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

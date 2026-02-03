@@ -2,7 +2,9 @@
 
 namespace Disjfa\TimetableBundle\Entity;
 
+use Disjfa\UserBundle\Contracts\UserEntityInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
@@ -19,17 +21,14 @@ class Timetable
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private $id;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(name: 'title', type: 'string')]
-    private $title;
+    private string $title;
 
-    /**
-     * @var string
-     */
+    #[ORM\Column(name: 'about', type: 'text', nullable: true)]
+    private ?string $about;
+
     #[ORM\Column(name: 'side', type: 'string')]
-    private $side;
+    private string $side;
 
     /**
      * @var TimetablePlace[]|ArrayCollection
@@ -63,14 +62,16 @@ class Timetable
     #[ORM\Column(name: 'box_bg', type: 'string', nullable: true)]
     private $boxBg;
 
+    #[ORM\ManyToMany(targetEntity: UserEntityInterface::class)]
+    #[ORM\JoinTable(name: 'timetable_user')]
+    private $users;
+
     public function __construct()
     {
         $this->side = 'horizontal';
+        $this->users = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id;
@@ -92,6 +93,16 @@ class Timetable
         $this->title = $title;
     }
 
+    public function getAbout(): ?string
+    {
+        return $this->about;
+    }
+
+    public function setAbout(?string $about): void
+    {
+        $this->about = $about;
+    }
+
     /**
      * @return TimetablePlace[]|ArrayCollection
      */
@@ -108,67 +119,61 @@ class Timetable
         return $this->dates;
     }
 
-    /**
-     * @return string
-     */
     public function getSide(): string
     {
         return $this->side;
     }
 
-    /**
-     * @param string $side
-     */
     public function setSide(string $side): void
     {
         $this->side = $side;
     }
 
-    /**
-     * @return string|null
-     */
     public function getBodyBg(): ?string
     {
         return $this->bodyBg;
     }
 
-    /**
-     * @param string|null $bodyBg
-     */
     public function setBodyBg(?string $bodyBg): void
     {
         $this->bodyBg = $bodyBg;
     }
 
-    /**
-     * @return string|null
-     */
     public function getHeaderBg(): ?string
     {
         return $this->headerBg;
     }
 
-    /**
-     * @param string|null $headerBg
-     */
     public function setHeaderBg(?string $headerBg): void
     {
         $this->headerBg = $headerBg;
     }
 
-    /**
-     * @return string|null
-     */
     public function getBoxBg(): ?string
     {
         return $this->boxBg;
     }
 
-    /**
-     * @param string|null $boxBg
-     */
     public function setBoxBg(?string $boxBg): void
     {
         $this->boxBg = $boxBg;
+    }
+
+    /** @return Collection<int, UserEntityInterface> */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(UserEntityInterface $user): void
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+        }
+    }
+
+    public function removeUser(UserEntityInterface $user): void
+    {
+        $this->users->removeElement($user);
     }
 }

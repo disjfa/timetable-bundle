@@ -2,6 +2,8 @@
 
 {% block _disjfa_timetable_content %}
     <div class="container">
+        {% include '@DisjfaTimetable/Timetable/_menu.html.twig' %}
+
         {{ form_start(form) }}
         {{ form_rest(form) }}
         <button type="submit" class="btn btn-primary">save</button>

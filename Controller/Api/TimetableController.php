@@ -9,7 +9,6 @@ use Disjfa\TimetableBundle\Transformer\TimetableTransformer;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Item;
-use PhpCsFixer\Console\Report\FixReport\ReporterFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

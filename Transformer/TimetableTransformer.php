@@ -12,9 +12,6 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class TimetableTransformer extends TransformerAbstract
 {
-    /**
-     * @var array
-     */
     protected array $defaultIncludes = [
         'dates',
         'places',
@@ -48,13 +45,6 @@ class TimetableTransformer extends TransformerAbstract
 
     /**
      * TimetableTransformer constructor.
-     *
-     * @param AuthorizationCheckerInterface $authorizationCheker
-     * @param RouterInterface               $router
-     * @param TimetableDateTransformer      $timetableDateTransformer
-     * @param TimetablePlaceTransformer     $timetablePlaceTransformer
-     * @param TimetableItemTransformer      $timetableItemTransformer
-     * @param CsrfTokenManagerInterface     $tokenManager
      */
     public function __construct(
         AuthorizationCheckerInterface $authorizationCheker,
@@ -62,7 +52,7 @@ class TimetableTransformer extends TransformerAbstract
         TimetableDateTransformer $timetableDateTransformer,
         TimetablePlaceTransformer $timetablePlaceTransformer,
         TimetableItemTransformer $timetableItemTransformer,
-        CsrfTokenManagerInterface $tokenManager
+        CsrfTokenManagerInterface $tokenManager,
     ) {
         $this->authorizationCheker = $authorizationCheker;
         $this->router = $router;
@@ -73,8 +63,6 @@ class TimetableTransformer extends TransformerAbstract
     }
 
     /**
-     * @param Timetable $timetable
-     *
      * @return array
      */
     public function transform(Timetable $timetable)
@@ -104,8 +92,6 @@ class TimetableTransformer extends TransformerAbstract
     }
 
     /**
-     * @param Timetable $timetable
-     *
      * @return Collection
      */
     public function includeDates(Timetable $timetable)
@@ -116,8 +102,6 @@ class TimetableTransformer extends TransformerAbstract
     }
 
     /**
-     * @param Timetable $timetable
-     *
      * @return Collection
      */
     public function includePlaces(Timetable $timetable)
@@ -128,8 +112,6 @@ class TimetableTransformer extends TransformerAbstract
     }
 
     /**
-     * @param Timetable $timetable
-     *
      * @return Collection
      */
     public function includeItems(Timetable $timetable)

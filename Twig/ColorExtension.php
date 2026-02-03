@@ -4,18 +4,10 @@ namespace Disjfa\TimetableBundle\Twig;
 
 use Spatie\Color\Contrast;
 use Spatie\Color\Hex;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
 
-class ColorExtension extends AbstractExtension
+class ColorExtension
 {
-    public function getFilters()
-    {
-        return [
-            new TwigFilter('contrast', [$this, 'contrastColor']),
-        ];
-    }
-
+    #[\Twig\Attribute\AsTwigFilter(name: 'contrast')]
     public function contrastColor($color): string
     {
         $light = Hex::fromString('#f8f9fa');
@@ -29,5 +21,4 @@ class ColorExtension extends AbstractExtension
 
         return $dark;
     }
-
 }

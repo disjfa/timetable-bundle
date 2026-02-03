@@ -14,26 +14,34 @@
         }
     </style>
     <div class="container">
-        <h1>{{ timetable.title }}
-            <a href="{{ path('disjfa_timetable_timetable_edit', {'timetable': timetable.id}) }}">
-                <i class="fas fa-edit"></i>
-            </a>
+        {% include '@DisjfaTimetable/Timetable/_menu.html.twig' %}
+        <h1>
+            {{ timetable.title }}
+            {% if is_granted('update', timetable) %}
+                <a href="{{ path('disjfa_timetable_timetable_edit', {'timetable': timetable.id}) }}">
+                    <i class="fas fa-edit"></i>
+                </a>
+            {% endif %}
         </h1>
-        <div class="btn-group">
-            <a href="{{ path('disjfa_timetable_date_create', {'timetable': timetable.id}) }}" class="btn btn-outline-primary">
-                Add date
-            </a>
-            <a href="{{ path('disjfa_timetable_place_create', {'timetable': timetable.id}) }}" class="btn btn-outline-primary">
-                Add place
-            </a>
-        </div>
+        {% if is_granted('update', timetable) %}
+            <div class="btn-group">
+                <a href="{{ path('disjfa_timetable_date_create', {'timetable': timetable.id}) }}" class="btn btn-outline-primary">
+                    Add date
+                </a>
+                <a href="{{ path('disjfa_timetable_place_create', {'timetable': timetable.id}) }}" class="btn btn-outline-primary">
+                    Add place
+                </a>
+            </div>
+        {% endif %}
         {% for date in timetable.dates %}
             <div class="py-3">
                 <h3>
                     {{ date.title }}
-                    <a href="{{ path('disjfa_timetable_date_edit', {'timetableDate': date.id}) }}">
-                        <i class="fas fa-edit"></i>
-                    </a>
+                    {% if is_granted('update', timetable) %}
+                        <a href="{{ path('disjfa_timetable_date_edit', {'timetableDate': date.id}) }}">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    {% endif %}
                 </h3>
                 {{ date.dateAt | date }}
                 <div class="table-responsive">
@@ -49,34 +57,37 @@
                                 <div>
                                     <h4>{{ place.title }}</h4>
                                 </div>
-                                <a href="{{ path('disjfa_timetable_place_edit', {'timetablePlace': place.id}) }}" class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-edit"></i>
-                                    edit place
-                                </a>
-                                <a href="{{ path('disjfa_timetable_item_create', {'timetableDate': date.id, 'timetablePlace': place.id}) }}" class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-plus"></i>
-                                    add time
-                                </a>
+                                {% if is_granted('update', timetable) %}
+                                    <div class="btn-group">
+                                        <a href="{{ path('disjfa_timetable_place_edit', {'timetablePlace': place.id}) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
+                                            edit place
+                                        </a>
+                                        <a href="{{ path('disjfa_timetable_item_create', {'timetableDate': date.id, 'timetablePlace': place.id}) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-plus"></i>
+                                            add time
+                                        </a>
+                                    </div>
+                                {% endif %}
                             </div>
                             {% for item in date.items %}
                                 {% if item.place.id == place.id %}
-                                    {{ item.start }}
-                                    {{ item.end }}
-
                                     <div class="box" style="grid-row: {{ item.start }} / {{ item.end }}; grid-column: {{ row }};">
                                         <h6>
                                             {{ item.title }}
-                                            <a href="{{ path('disjfa_timetable_item_edit', {'timetableItem': item.id}) }}">
-                                                <i class="fas fa-edit"></i>
-                                                edit
-                                            </a>
+                                            {% if is_granted('update', timetable) %}
+                                                <a href="{{ path('disjfa_timetable_item_edit', {'timetableItem': item.id}) }}">
+                                                    <i class="fas fa-edit"></i>
+                                                    edit
+                                                </a>
+                                            {% endif %}
                                         </h6>
-
-                                        <br>
-                                        <small class="text-muted">
-                                            {{ item.dateStart | date('H:i') }}
-                                            / {{ item.dateEnd | date('H:i') }}
-                                        </small>
+                                        <div>
+                                            <small class="text-muted">
+                                                {{ item.dateStart | date('H:i') }}
+                                                / {{ item.dateEnd | date('H:i') }}
+                                            </small>
+                                        </div>
                                     </div>
                                 {% endif %}
                             {% endfor %}

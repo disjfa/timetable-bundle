@@ -15,8 +15,6 @@ class TimetableDateTransformer extends TransformerAbstract
 
     /**
      * TimetableDateTransformer constructor.
-     *
-     * @param AuthorizationCheckerInterface $authorizationCheker
      */
     public function __construct(AuthorizationCheckerInterface $authorizationCheker)
     {
@@ -24,8 +22,6 @@ class TimetableDateTransformer extends TransformerAbstract
     }
 
     /**
-     * @param TimetableDate $timetableDate
-     *
      * @return array
      */
     public function transform(TimetableDate $timetableDate)

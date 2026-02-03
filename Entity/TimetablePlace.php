@@ -28,7 +28,7 @@ class TimetablePlace
     /**
      * @var Timetable
      */
-    #[ORM\ManyToOne(targetEntity: \Disjfa\TimetableBundle\Entity\Timetable::class, inversedBy: 'places')]
+    #[ORM\ManyToOne(targetEntity: Timetable::class, inversedBy: 'places')]
     private $timetable;
 
     /**
@@ -40,7 +40,7 @@ class TimetablePlace
     /**
      * @var TimetableItem[]|ArrayCollection
      */
-    #[ORM\OneToMany(targetEntity: \Disjfa\TimetableBundle\Entity\TimetableItem::class, mappedBy: 'place')]
+    #[ORM\OneToMany(targetEntity: TimetableItem::class, mappedBy: 'place')]
     private $items;
 
     public function __construct(Timetable $timetable)
@@ -49,9 +49,6 @@ class TimetablePlace
         $this->seqnr = 0;
     }
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id;
@@ -73,33 +70,21 @@ class TimetablePlace
         $this->title = $title;
     }
 
-    /**
-     * @return Timetable
-     */
     public function getTimetable(): Timetable
     {
         return $this->timetable;
     }
 
-    /**
-     * @param Timetable $timetable
-     */
     public function setTimetable(Timetable $timetable): void
     {
         $this->timetable = $timetable;
     }
 
-    /**
-     * @return int
-     */
     public function getSeqnr(): int
     {
         return $this->seqnr;
     }
 
-    /**
-     * @param int $seqnr
-     */
     public function setSeqnr(int $seqnr): void
     {
         $this->seqnr = $seqnr;

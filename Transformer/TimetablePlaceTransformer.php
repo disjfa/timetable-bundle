@@ -22,9 +22,9 @@ class TimetablePlaceTransformer extends TransformerAbstract
             'title' => $timetablePlace->getTitle(),
         ];
 
-//        if ($this->authorizationChecker->isGranted(UserVoter::SEE_EMAIL, $user)) {
-//            $data['email'] = $user->email();
-//        }
+        //        if ($this->authorizationChecker->isGranted(UserVoter::SEE_EMAIL, $user)) {
+        //            $data['email'] = $user->email();
+        //        }
         return $data;
     }
 }

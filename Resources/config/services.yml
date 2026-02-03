@@ -2,7 +2,7 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: true
+        public: false
 
     Disjfa\TimetableBundle\:
         resource: './../../*'
@@ -11,16 +11,10 @@ services:
     Disjfa\TimetableBundle\Controller\:
         resource: '../../Controller/*'
         tags: ['controller.service_arguments']
-        calls:
-            - [setContainer, ['@service_container']]
 
     Disjfa\TimetableBundle\Security\:
         resource: './../../Security/*'
         tags: ['security.voter']
-
-    Disjfa\TimetableBundle\Twig\:
-        resource: './../../Twig/*'
-        tags: ['twig.extension']
 
     Disjfa\TimetableBundle\Menu\TimetableMenuBuilder:
         autowire: true

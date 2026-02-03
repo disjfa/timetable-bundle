@@ -2,7 +2,6 @@
 
 namespace Disjfa\TimetableBundle\Entity;
 
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
@@ -29,28 +28,28 @@ class TimetableDate
     /**
      * @var Timetable
      */
-    #[ORM\ManyToOne(targetEntity: \Disjfa\TimetableBundle\Entity\Timetable::class, inversedBy: 'dates')]
+    #[ORM\ManyToOne(targetEntity: Timetable::class, inversedBy: 'dates')]
     private $timetable;
 
     /**
      * @var TimetableItem[]|ArrayCollection
      */
-    #[ORM\OneToMany(targetEntity: \Disjfa\TimetableBundle\Entity\TimetableItem::class, mappedBy: 'date')]
+    #[ORM\OneToMany(targetEntity: TimetableItem::class, mappedBy: 'date')]
     private $items;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      */
     #[ORM\Column(name: 'date_at', type: 'date')]
     private $dateAt;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      */
     private $startDate;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      */
     private $endDate;
 
@@ -62,12 +61,9 @@ class TimetableDate
     public function __construct(Timetable $timetable)
     {
         $this->timetable = $timetable;
-        $this->dateAt = new DateTime();
+        $this->dateAt = new \DateTime();
     }
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id;
@@ -89,34 +85,22 @@ class TimetableDate
         $this->title = $title;
     }
 
-    /**
-     * @return Timetable
-     */
     public function getTimetable(): Timetable
     {
         return $this->timetable;
     }
 
-    /**
-     * @param Timetable $timetable
-     */
     public function setTimetable(Timetable $timetable): void
     {
         $this->timetable = $timetable;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getDateAt(): DateTime
+    public function getDateAt(): \DateTime
     {
         return $this->dateAt;
     }
 
-    /**
-     * @param DateTime $dateAt
-     */
-    public function setDateAt(DateTime $dateAt): void
+    public function setDateAt(\DateTime $dateAt): void
     {
         $this->dateAt = $dateAt;
     }
@@ -129,7 +113,7 @@ class TimetableDate
         return $this->items;
     }
 
-    public function getStartDate(): DateTime
+    public function getStartDate(): \DateTime
     {
         if (null !== $this->startDate) {
             return $this->startDate;
@@ -155,7 +139,7 @@ class TimetableDate
         return $this->startDate;
     }
 
-    public function getEndDate(): DateTime
+    public function getEndDate(): \DateTime
     {
         if (null !== $this->endDate) {
             return $this->endDate;

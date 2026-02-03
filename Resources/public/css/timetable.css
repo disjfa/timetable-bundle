@@ -1,0 +1,30 @@
+:root {
+  --timetable-gap: 1rem;
+  --timetable-box-background-color: #000;
+  --timetable-box-color: #EEE;
+  --timetable-box-border-radius: .25rem;
+  --timetable-box-padding: .5rem;
+  --timetable-box-min-width: 100px;
+  --timetable-box-title-min-width: 250px;
+  --timetable-box-title-background-color: #eee;
+  --timetable-box-title-color: #000;
+}
+
+.timetable {
+  display: grid;
+  grid-gap: var(--timetable-gap);
+
+  .box {
+    background-color: var(--timetable-box-background-color);
+    color: var(--timetable-box-color);
+    border-radius: var(--timetable-box-border-radius);
+    padding: var(--timetable-box-padding);
+    min-width: var(--timetable-box-min-width);
+  }
+
+  .box-title {
+    min-width: var(--timetable-box-title-min-width);
+    background-color: var(--timetable-box-title-background-color);
+    color: var(--timetable-box-title-color);
+  }
+}

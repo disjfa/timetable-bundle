@@ -3,18 +3,22 @@
 {% block _disjfa_timetable_content %}
     <div class="container">
         <h1>{{ timetable.timetable.title }}
-            <a href="{{ path('disjfa_timetable_timetable_edit', {'timetable': timetable.timetable.id}) }}">
-                <i class="fas fa-edit"></i>
-            </a>
+            {% if is_granted('update', timetable) %}
+                <a href="{{ path('disjfa_timetable_timetable_edit', {'timetable': timetable.timetable.id}) }}">
+                    <i class="fas fa-edit"></i>
+                </a>
+            {% endif %}
         </h1>
-        <div class="btn-group">
-            <a href="{{ path('disjfa_timetable_date_create', {'timetable': timetable.timetable.id}) }}" class="btn btn-outline-primary">
-                Add date
-            </a>
-            <a href="{{ path('disjfa_timetable_place_create', {'timetable': timetable.timetable.id}) }}" class="btn btn-outline-primary">
-                Add place
-            </a>
-        </div>
+        {% if is_granted('update', timetable) %}
+            <div class="btn-group">
+                <a href="{{ path('disjfa_timetable_date_create', {'timetable': timetable.timetable.id}) }}" class="btn btn-outline-primary">
+                    Add date
+                </a>
+                <a href="{{ path('disjfa_timetable_place_create', {'timetable': timetable.timetable.id}) }}" class="btn btn-outline-primary">
+                    Add place
+                </a>
+            </div>
+        {% endif %}
         {% for date in timetable.dates %}
             <div class="py-3">
                 <h3>

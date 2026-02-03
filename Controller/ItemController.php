@@ -6,56 +6,42 @@ use Disjfa\TimetableBundle\Entity\TimetableDate;
 use Disjfa\TimetableBundle\Entity\TimetableItem;
 use Disjfa\TimetableBundle\Entity\TimetablePlace;
 use Disjfa\TimetableBundle\Form\Type\TimetableItemType;
+use Disjfa\TimetableBundle\Security\TimetableVoter;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/timetable/item")
- */
+#[Route(path: '/timetable/item')]
 class ItemController extends AbstractController
 {
-    /**
-     * @Route("/create/{timetablePlace}/{timetableDate}", name="disjfa_timetable_item_create")
-     *
-     * @param Request        $request
-     * @param TimetablePlace $timetablePlace
-     * @param TimetableDate  $timetableDate
-     *
-     * @return Response
-     */
+    public function __construct(protected readonly EntityManagerInterface $entityManager)
+    {
+    }
+
+    #[Route(path: '/create/{timetablePlace}/{timetableDate}', name: 'disjfa_timetable_item_create')]
     public function createAction(Request $request, TimetablePlace $timetablePlace, TimetableDate $timetableDate)
     {
+        $this->denyAccessUnlessGranted(TimetableVoter::UPDATE, $timetablePlace->getTimetable());
+        $this->denyAccessUnlessGranted(TimetableVoter::UPDATE, $timetableDate->getTimetable());
+
         $timetableItem = new TimetableItem($timetablePlace, $timetableDate);
         $form = $this->createForm(TimetableItemType::class, $timetableItem);
 
         return $this->handleForm($form, $request);
     }
 
-    /**
-     * @Route("/{timetableItem}/edit", name="disjfa_timetable_item_edit")
-     *
-     * @param Request       $request
-     * @param TimetableItem $timetableItem
-     *
-     * @return Response
-     */
+    #[Route(path: '/{timetableItem}/edit', name: 'disjfa_timetable_item_edit')]
     public function editAction(Request $request, TimetableItem $timetableItem)
     {
+        $this->denyAccessUnlessGranted(TimetableVoter::UPDATE, $timetableItem->getDate()->getTimetable());
+
         $form = $this->createForm(TimetableItemType::class, $timetableItem);
 
         return $this->handleForm($form, $request);
     }
 
-    /**
-     * @param FormInterface $form
-     * @param Request       $request
-     *
-     * @return Response
-     */
     private function handleForm(FormInterface $form, Request $request)
     {
         $form->handleRequest($request);
@@ -63,9 +49,8 @@ class ItemController extends AbstractController
             /** @var TimetableItem $timetableItem */
             $timetableItem = $form->getData();
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($timetableItem);
-            $entityManager->flush();
+            $this->entityManager->persist($timetableItem);
+            $this->entityManager->flush();
 
             $this->addFlash('success', 'timetable.flash.timetable_item_saved');
 
@@ -76,6 +61,7 @@ class ItemController extends AbstractController
 
         return $this->render('@DisjfaTimetable/Timetable/form.html.twig', [
             'form' => $form->createView(),
+            'timetable' => $form->getData()->getPlace()->getTimetable(),
         ]);
     }
 }

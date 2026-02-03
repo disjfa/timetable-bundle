@@ -2,7 +2,6 @@
 
 namespace Disjfa\TimetableBundle\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
@@ -28,23 +27,23 @@ class TimetableItem
     /**
      * @var TimetablePlace
      */
-    #[ORM\ManyToOne(targetEntity: \Disjfa\TimetableBundle\Entity\TimetablePlace::class, inversedBy: 'items')]
+    #[ORM\ManyToOne(targetEntity: TimetablePlace::class, inversedBy: 'items')]
     private $place;
 
     /**
      * @var TimetableDate
      */
-    #[ORM\ManyToOne(targetEntity: \Disjfa\TimetableBundle\Entity\TimetableDate::class, inversedBy: 'items')]
+    #[ORM\ManyToOne(targetEntity: TimetableDate::class, inversedBy: 'items')]
     private $date;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      */
     #[ORM\Column(name: 'date_start', type: 'datetime')]
     private $dateStart;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      */
     #[ORM\Column(name: 'date_end', type: 'datetime')]
     private $dateEnd;
@@ -65,9 +64,6 @@ class TimetableItem
         $this->dateEnd = $date->getDateAt();
     }
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id;
@@ -89,66 +85,42 @@ class TimetableItem
         $this->title = $title;
     }
 
-    /**
-     * @return TimetablePlace
-     */
     public function getPlace(): TimetablePlace
     {
         return $this->place;
     }
 
-    /**
-     * @param TimetablePlace $place
-     */
     public function setPlace(TimetablePlace $place): void
     {
         $this->place = $place;
     }
 
-    /**
-     * @return TimetableDate
-     */
     public function getDate(): TimetableDate
     {
         return $this->date;
     }
 
-    /**
-     * @param TimetableDate $date
-     */
     public function setDate(TimetableDate $date): void
     {
         $this->date = $date;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getDateStart(): DateTime
+    public function getDateStart(): \DateTime
     {
         return $this->dateStart;
     }
 
-    /**
-     * @param DateTime $dateStart
-     */
-    public function setDateStart(DateTime $dateStart): void
+    public function setDateStart(\DateTime $dateStart): void
     {
         $this->dateStart = $dateStart;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getDateEnd(): DateTime
+    public function getDateEnd(): \DateTime
     {
         return $this->dateEnd;
     }
 
-    /**
-     * @param DateTime $dateEnd
-     */
-    public function setDateEnd(DateTime $dateEnd): void
+    public function setDateEnd(\DateTime $dateEnd): void
     {
         $this->dateEnd = $dateEnd;
     }
@@ -162,6 +134,7 @@ class TimetableItem
         $minutes = 60 * 15;
         $startDate = $this->getDate()->getStartDate();
         $this->start = floor(($this->dateStart->getTimestamp() - $startDate->getTimestamp()) / $minutes + 2);
+
         return $this->start;
     }
 
@@ -174,6 +147,7 @@ class TimetableItem
         $minutes = 60 * 15;
         $startDate = $this->getDate()->getStartDate();
         $this->end = floor(($this->dateEnd->getTimestamp() - $startDate->getTimestamp()) / $minutes + 2);
+
         return $this->end;
     }
 }

@@ -6,33 +6,36 @@ use Disjfa\TimetableBundle\Entity\Timetable;
 use Disjfa\TimetableBundle\Entity\TimetableDate;
 use Disjfa\TimetableBundle\Entity\TimetablePlace;
 use Disjfa\TimetableBundle\Form\Type\TimetablePlaceType;
+use Disjfa\TimetableBundle\Security\TimetableVoter;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/timetable/place")
- */
+#[Route(path: '/timetable/place')]
 class PlaceController extends AbstractController
 {
-    /**
-     * @Route("/create/{timetable}", name="disjfa_timetable_place_create")
-     */
+    public function __construct(protected readonly EntityManagerInterface $entityManager)
+    {
+    }
+
+    #[Route(path: '/create/{timetable}', name: 'disjfa_timetable_place_create')]
     public function createAction(Request $request, Timetable $timetable)
     {
+        $this->denyAccessUnlessGranted(TimetableVoter::UPDATE, $timetable);
+
         $timetableDate = new TimetablePlace($timetable);
         $form = $this->createForm(TimetablePlaceType::class, $timetableDate);
 
         return $this->handleForm($form, $request);
     }
 
-    /**
-     * @Route("/{timetablePlace}/edit", name="disjfa_timetable_place_edit")
-     */
+    #[Route(path: '/{timetablePlace}/edit', name: 'disjfa_timetable_place_edit')]
     public function editAction(Request $request, TimetablePlace $timetablePlace)
     {
+        $this->denyAccessUnlessGranted(TimetableVoter::UPDATE, $timetablePlace->getTimetable());
+
         $form = $this->createForm(TimetablePlaceType::class, $timetablePlace);
 
         return $this->handleForm($form, $request);
@@ -45,9 +48,8 @@ class PlaceController extends AbstractController
             /** @var TimetableDate $timetableDate */
             $timetableDate = $form->getData();
 
-            $entitymanager = $this->getDoctrine()->getManager();
-            $entitymanager->persist($timetableDate);
-            $entitymanager->flush();
+            $this->entityManager->persist($timetableDate);
+            $this->entityManager->flush();
 
             $this->addFlash('success', 'timetable.flash.timetable_place_saved');
 
@@ -58,6 +60,7 @@ class PlaceController extends AbstractController
 
         return $this->render('@DisjfaTimetable/Timetable/form.html.twig', [
             'form' => $form->createView(),
+            'timetable' => $form->getData()->getTimetable(),
         ]);
     }
 }
