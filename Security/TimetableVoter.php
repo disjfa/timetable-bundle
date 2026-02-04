@@ -34,35 +34,32 @@ class TimetableVoter extends Voter
     {
         $user = $token->getUser();
 
+        if (self::VIEW === $attribute) {
+            return $this->canView($timetable, $user);
+        }
+
         if (false === $user instanceof UserInterface) {
             // the user must be logged in; if not, deny access
             return false;
         }
 
-        switch ($attribute) {
-            case self::VIEW:
-                return $this->canView($timetable, $user);
-            case self::CREATE:
-                return $this->canCreate($timetable, $user);
-            case self::UPDATE:
-                return $this->canUpdate($timetable, $user);
+        if (self::CREATE === $attribute) {
+            return $this->canCreate($timetable, $user);
+        }
+
+        if (self::UPDATE === $attribute) {
+            return $this->canUpdate($timetable, $user);
         }
 
         throw new \LogicException('This code should not be reached!');
     }
 
-    /**
-     * @return bool
-     */
-    private function canView(Timetable $timetable, UserInterface $user)
+    private function canView(Timetable $timetable, ?UserInterface $user): bool
     {
         return true;
     }
 
-    /**
-     * @return bool
-     */
-    private function canUpdate(Timetable $timetable, UserInterface $user)
+    private function canUpdate(Timetable $timetable, UserInterface $user): bool
     {
         if ($timetable->getUsers()->contains($user)) {
             return true;
@@ -71,10 +68,7 @@ class TimetableVoter extends Voter
         return false;
     }
 
-    /**
-     * @return bool
-     */
-    private function canCreate(Timetable $timetable, UserInterface $user)
+    private function canCreate(Timetable $timetable, UserInterface $user): bool
     {
         return false;
     }

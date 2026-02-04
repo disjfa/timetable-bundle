@@ -24,6 +24,9 @@ class TimetableItem
     #[ORM\Column(name: 'title', type: 'string')]
     private $title;
 
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
+    private $description;
+
     /**
      * @var TimetablePlace
      */
@@ -83,6 +86,16 @@ class TimetableItem
     public function setTitle($title): void
     {
         $this->title = $title;
+    }
+
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    public function setDescription($description): void
+    {
+        $this->description = $description;
     }
 
     public function getPlace(): TimetablePlace

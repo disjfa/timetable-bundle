@@ -1,0 +1,12 @@
+<style>
+    body {
+    {% if timetable.bodyBg %} --bs-body-bg: {{ timetable.bodyBg }};
+        --bs-body-color: {{ timetable.bodyBg | contrast }};
+        --bs-emphasis-color: {{ timetable.bodyBg | contrast }};
+    {% endif %}{% if timetable.headerBg %} --timetable-box-title-background-color: {{ timetable.headerBg }};
+        --timetable-box-title-color: {{ timetable.headerBg | contrast }};
+    {% endif %}{% if timetable.boxBg %} --timetable-box-background-color: {{ timetable.boxBg }};
+        --timetable-box-color: {{ timetable.boxBg | contrast }};
+    {% endif %}
+    }
+</style>

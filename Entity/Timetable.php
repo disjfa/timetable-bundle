@@ -93,9 +93,9 @@ class Timetable
         $this->title = $title;
     }
 
-    public function getAbout(): ?string
+    public function getAbout(): string
     {
-        return $this->about;
+        return (string) $this->about;
     }
 
     public function setAbout(?string $about): void
