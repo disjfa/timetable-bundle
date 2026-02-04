@@ -1,10 +1,10 @@
-<ul class="nav nav-underline">
-    <li class="nav-item">
-        <a class="nav-link{% if app.request.attributes.get('_route') == 'disjfa_timetable_timetable_show' %} active{% endif %}" href="{{ path('disjfa_timetable_timetable_show', {timetable: timetable.id}) }}">Timetable</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link {% if app.request.attributes.get('_route') == 'disjfa_timetable_timetable_about' %} active{% endif %}" href="{{ path('disjfa_timetable_timetable_about', {timetable: timetable.id}) }}">About</a>
-    </li>
-</ul>
-
-
+{% if timetable.id %}
+    <ul class="nav nav-underline">
+        <li class="nav-item">
+            <a class="nav-link{% if app.request.attributes.get('_route') == 'disjfa_timetable_timetable_show' %} active{% endif %}" href="{{ path('disjfa_timetable_timetable_show', {timetable: timetable.id}) }}">Timetable</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if app.request.attributes.get('_route') == 'disjfa_timetable_timetable_about' %} active{% endif %}" href="{{ path('disjfa_timetable_timetable_about', {timetable: timetable.id}) }}">About</a>
+        </li>
+    </ul>
+{% endif %}
