@@ -13,20 +13,25 @@
 .timetable {
     display: grid;
     grid-gap: var(--timetable-gap);
+}
 
-    .box {
-        background-color: var(--timetable-box-background-color);
-        color: var(--timetable-box-color);
-        border: 1px solid var(--timetable-box-background-color);
-        border-radius: var(--timetable-box-border-radius);
-        padding: var(--timetable-box-padding);
-        min-width: var(--timetable-box-min-width);
-    }
+.timetable .box {
+    background-color: var(--timetable-box-background-color);
+    color: var(--timetable-box-color);
+    border: 1px solid var(--timetable-box-background-color);
+    border-radius: var(--timetable-box-border-radius);
+    padding: var(--timetable-box-padding);
+    min-width: var(--timetable-box-min-width);
+}
 
-    .box-title {
-        min-width: var(--timetable-box-title-min-width);
-        background-color: var(--timetable-box-title-background-color);
-        color: var(--timetable-box-title-color);
-        border-color: var(--timetable-box-title-background-color);
-    }
+.timetable .box-title {
+    min-width: var(--timetable-box-title-min-width);
+    background-color: var(--timetable-box-title-background-color);
+    color: var(--timetable-box-title-color);
+    border-color: var(--timetable-box-title-background-color);
+}
+
+.timetable-dialog {
+    min-width: 350px;
+    max-width: 768px;
 }
