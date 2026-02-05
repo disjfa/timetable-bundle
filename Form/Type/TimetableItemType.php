@@ -4,11 +4,12 @@ namespace Disjfa\TimetableBundle\Form\Type;
 
 use Disjfa\TimetableBundle\Entity\TimetableItem;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class TimetableItemType extends AbstractType
@@ -28,22 +29,34 @@ class TimetableItemType extends AbstractType
             ],
         ]);
 
-        $builder->add('dateStart', DateTimeType::class, [
+        $builder->add('dateStart', DateType::class, [
             'label' => 'form.timetable_item.label.date_start',
-            'constraints' => new NotBlank(),
-            'minutes' => [0, 15, 30, 45],
-            'widget' => 'single_text',
             'html5' => false,
+            'widget' => 'single_text',
             'format' => 'yyyy-MM-dd HH:mm',
+            'constraints' => new DateTime([
+                'format' => 'Y-m-d H:i',
+                'groups' => 'string',
+            ]),
+            'attr' => [
+                'data-controller' => 'flatpickr',
+                'data-format' => 'Y-m-d H:i',
+            ],
         ]);
 
-        $builder->add('dateEnd', DateTimeType::class, [
+        $builder->add('dateEnd', DateType::class, [
             'label' => 'form.timetable_item.label.date_end',
-            'constraints' => new NotBlank(),
-            'minutes' => [0, 15, 30, 45],
-            'widget' => 'single_text',
             'html5' => false,
+            'widget' => 'single_text',
             'format' => 'yyyy-MM-dd HH:mm',
+            'constraints' => new DateTime([
+                'format' => 'Y-m-d H:i',
+                'groups' => 'string',
+            ]),
+            'attr' => [
+                'data-controller' => 'flatpickr',
+                'data-format' => 'Y-m-d H:i',
+            ],
         ]);
     }
 

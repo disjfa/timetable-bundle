@@ -16,6 +16,10 @@ services:
         resource: './../../Security/*'
         tags: ['security.voter']
 
+    Disjfa\TimetableBundle\Repository\:
+        resource: './../../Repository/*'
+        tags: ['doctrine.repository_service']
+
     Disjfa\TimetableBundle\Menu\TimetableMenuBuilder:
         autowire: true
         tags:

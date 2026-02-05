@@ -59,7 +59,7 @@ class ItemController extends AbstractController
             ]);
         }
 
-        return $this->render('@DisjfaTimetable/Timetable/form.html.twig', [
+        return $this->render('@DisjfaTimetable/item/form.html.twig', [
             'form' => $form->createView(),
             'timetable' => $form->getData()->getPlace()->getTimetable(),
         ]);

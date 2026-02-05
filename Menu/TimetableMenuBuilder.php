@@ -26,7 +26,7 @@ class TimetableMenuBuilder
 
         $menu->addChild('timetable', [
             'route' => 'disjfa_timetable_timetable_index',
-            'label' => $this->translator->trans('menu.timetable', [], 'site'),
+            'label' => $this->translator->trans('menu.timetable', [], 'timetable'),
         ])->setExtra('icon', 'fa-calendar');
     }
 }

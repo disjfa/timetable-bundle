@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class TimetableDateType extends AbstractType
@@ -20,8 +21,18 @@ class TimetableDateType extends AbstractType
         ]);
 
         $builder->add('dateAt', DateType::class, [
-            'label' => 'form.timetable_date.label.dateAt',
-            'constraints' => new NotBlank(),
+            'required' => false,
+            'html5' => false,
+            'widget' => 'single_text',
+            'format' => 'yyyy-MM-dd',
+            'constraints' => new DateTime([
+                'format' => 'Y-m-d',
+                'groups' => 'string',
+            ]),
+            'attr' => [
+                'data-controller' => 'flatpickr',
+                'data-format' => 'Y-m-d',
+            ],
         ]);
     }
 

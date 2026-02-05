@@ -3,15 +3,45 @@
 {% block _disjfa_timetable_content %}
     <div class="container">
         <h1>Timetables</h1>
-        <a href="{{ path('disjfa_timetable_timetable_create') }}" class="btn btn-primary">
-            Create new
-        </a>
-        {% for timetable in timetables %}
-            <div>
-                <a href="{{ path('disjfa_timetable_timetable_show', {'timetable': timetable.id}) }}">
-                    {{ timetable.title }}
+        <div class="py-3">
+            {% if is_granted('ROLE_USER') %}
+                <a href="{{ path('disjfa_timetable_timetable_create') }}" class="btn btn-primary">
+                    Create new
                 </a>
-            </div>
-        {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Places</th>
+                    <th>Dates</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for timetable in timetables %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('disjfa_timetable_timetable_show', {'timetable': timetable.id}) }}">
+                                {{ timetable.title }}
+                            </a>
+                        </td>
+                        <td>
+                            {% for place in timetable.places %}
+                                {{ place.title }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for date in timetable.dates %}
+                                {{ date.title }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}

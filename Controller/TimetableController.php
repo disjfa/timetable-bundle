@@ -26,10 +26,10 @@ class TimetableController extends AbstractController
     }
 
     #[Route(path: '', name: 'disjfa_timetable_timetable_index')]
-    public function indexAction()
+    public function indexAction(#[CurrentUser] ?UserInterface $user = null)
     {
         return $this->render('@DisjfaTimetable/Timetable/index.html.twig', [
-            'timetables' => $this->registry->getRepository(Timetable::class)->findAll(),
+            'timetables' => $this->registry->getRepository(Timetable::class)->findAllByOptions(user: $user),
         ]);
     }
 

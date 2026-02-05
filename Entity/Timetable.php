@@ -2,6 +2,7 @@
 
 namespace Disjfa\TimetableBundle\Entity;
 
+use Disjfa\TimetableBundle\Repository\TimetableRepository;
 use Disjfa\UserBundle\Contracts\UserEntityInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
 #[ORM\Table(name: 'timetable')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: TimetableRepository::class)]
 class Timetable
 {
     /**
@@ -70,6 +71,11 @@ class Timetable
     {
         $this->side = 'horizontal';
         $this->users = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->getTitle();
     }
 
     public function getId(): ?string

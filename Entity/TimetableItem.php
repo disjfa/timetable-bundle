@@ -61,10 +61,13 @@ class TimetableItem
 
     public function __construct(TimetablePlace $place, TimetableDate $date)
     {
+        $dateStart = clone $date->getDateAt()->setTime(12, 00);
+        $dateEnd = clone $date->getDateAt()->setTime(13, 00);
+
         $this->place = $place;
         $this->date = $date;
-        $this->dateStart = $date->getDateAt();
-        $this->dateEnd = $date->getDateAt();
+        $this->dateStart = $dateStart;
+        $this->dateEnd = $dateEnd;
     }
 
     public function getId(): string

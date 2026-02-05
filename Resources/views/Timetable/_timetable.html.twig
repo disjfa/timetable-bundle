@@ -1,0 +1,137 @@
+<h1>
+    {{ timetable.title }}
+    {% if is_granted('update', timetable) %}
+        <a href="{{ path('disjfa_timetable_timetable_edit', {'timetable': timetable.id}) }}">
+            <i class="fas fa-edit"></i>
+        </a>
+    {% endif %}
+</h1>
+{% if is_granted('update', timetable) %}
+    <div class="btn-group">
+        <a href="{{ path('disjfa_timetable_date_create', {'timetable': timetable.id}) }}" class="btn btn-sm btn-outline-primary">
+            Add date
+        </a>
+        <a href="{{ path('disjfa_timetable_place_create', {'timetable': timetable.id}) }}" class="btn btn-sm btn-outline-primary">
+            Add place
+        </a>
+    </div>
+{% endif %}
+{% for date in timetable.dates %}
+    <div class="py-3">
+        <h3>
+            {{ date.title }}
+            {% if is_granted('update', timetable) %}
+                <a href="{{ path('disjfa_timetable_date_edit', {'timetableDate': date.id}) }}">
+                    <i class="fas fa-edit"></i>
+                </a>
+            {% endif %}
+        </h3>
+        {{ date.dateAt | date }}
+        <div class="table-responsive">
+            <div class="timetable py-3">
+                {% for header in date.headers %}
+                    <div class="box" style="grid-row: {{ header.start }} / {{ header.end }}; grid-column: 1;">
+                        {{ header.date | date('G:i') }}
+                    </div>
+                {% endfor %}
+                {% for place in timetable.places %}
+                    {% set row = loop.index + 1 %}
+                    <div class="box box-title" style="grid-row: 1; grid-column: {{ row }};">
+                        <div>
+                            <h4>{{ place.title }}</h4>
+                        </div>
+                        {% if is_granted('update', timetable) %}
+                            <div class="btn-group">
+                                <a href="{{ path('disjfa_timetable_place_edit', {'timetablePlace': place.id}) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-edit"></i>
+                                    edit place
+                                </a>
+                                <a href="{{ path('disjfa_timetable_item_create', {'timetableDate': date.id, 'timetablePlace': place.id}) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-plus"></i>
+                                    add time
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% for item in date.items %}
+                        {% if item.place.id == place.id %}
+                            <div class="box" style="grid-row: {{ item.start }} / {{ item.end }}; grid-column: {{ row }};" {{ stimulus_controller('like-item', {timetable: timetable.id, item: item.id}) }}>
+                                <h5 class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        {{ item.title }}
+                                        <button class="btn btn-sm btn-outline-success" commandfor="item-{{ item.id }}-dialog" command="show-modal">
+                                            <i class="fa-solid fa-fw fa-circle-info"></i>
+                                        </button>
+                                    </div>
+                                    <a {{ stimulus_target('like-item', 'star') }} {{ stimulus_action('like-item', 'like', 'click') }} href="#" class="btn btn-sm btn-outline-success">
+                                        <i class="fa-regular fa-fw fa-star"></i>
+                                    </a>
+                                </h5>
+
+                                <dialog id="item-{{ item.id }}-dialog" class="dialog">
+                                    <div class="d-flex justify-content-between">
+                                        <h3>{{ item.title }}</h3>
+                                        <button commandfor="item-{{ item.id }}-dialog" command="close" class="btn btn-outline-secondary">
+                                            Close
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <a {{ stimulus_target('like-item', 'star') }} {{ stimulus_action('like-item', 'like', 'click') }} href="#" class="btn btn-sm btn-outline-success">
+                                            <i class="fa-regular fa-fw fa-star"></i>
+                                        </a>
+                                        <small class="text-muted">
+                                            {{ item.dateStart | date('H:i') }}
+                                            / {{ item.dateEnd | date('H:i') }}
+                                        </small>
+                                    </div>
+                                    {{ item.description }}
+                                </dialog>
+                                <div>
+                                    <small class="text-muted">
+                                        {{ item.dateStart | date('H:i') }}
+                                        / {{ item.dateEnd | date('H:i') }}
+                                    </small>
+                                </div>
+                                {% if is_granted('update', timetable) %}
+                                    <a href="{{ path('disjfa_timetable_item_edit', {'timetableItem': item.id}) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-edit"></i>
+                                        edit
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                        <div class="col-12 col-md-8">
+                            <h3>Where will it take place?</h3>
+                            <p class="lead">
+                                Before we can schedule sessions, we need a place. A place can be a venue, a concert
+                                hall, or simply an office room. You can add more places later (e.g. "Main Stage", "Room
+                                A", "Workshop Space").
+                            </p>
+                            <a href="{{ path('disjfa_timetable_place_create', {'timetable': timetable.id}) }}" class="btn btn-primary">
+                                Add place
+                            </a>
+                        </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% else %}
+    {% if is_granted('update', timetable) %}
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <h3>Add your first date</h3>
+                <div class="lead">
+                    Your timetable starts with a day. Pick the event date and we’ll build the schedule around it—tracks,
+                    sessions, speakers, and breaks all snap into place once the day is set.
+                </div>
+                <div class="py-3">
+                    <a href="{{ path('disjfa_timetable_date_create', {'timetable': timetable.id}) }}" class="btn btn-primary">
+                        Add date
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}

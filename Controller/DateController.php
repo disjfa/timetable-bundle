@@ -58,7 +58,7 @@ class DateController extends AbstractController
             ]);
         }
 
-        return $this->render('@DisjfaTimetable/Timetable/form.html.twig', [
+        return $this->render('@DisjfaTimetable/date/form.html.twig', [
             'form' => $form->createView(),
             'timetable' => $form->getData()->getTimetable(),
         ]);

@@ -44,7 +44,7 @@ class TimetableVoter extends Voter
         }
 
         if (self::CREATE === $attribute) {
-            return $this->canCreate($timetable, $user);
+            return $this->canCreate($user);
         }
 
         if (self::UPDATE === $attribute) {
@@ -68,8 +68,12 @@ class TimetableVoter extends Voter
         return false;
     }
 
-    private function canCreate(Timetable $timetable, UserInterface $user): bool
+    private function canCreate(UserInterface $user): bool
     {
+        if ($user instanceof UserInterface) {
+            return true;
+        }
+
         return false;
     }
 }
