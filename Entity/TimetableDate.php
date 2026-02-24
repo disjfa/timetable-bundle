@@ -170,16 +170,37 @@ class TimetableDate
         $startDate = clone $this->getStartDate();
         $endDate = clone $this->getEndDate();
 
-        $minutes = 60 * 15;
+        // strep in minutes, must be devisible by 60, for example 5, 10, 15
+        $step = 15;
+        // minutes per step, 15 * 60 = 900
+        $minutes = 60 * $step;
+        // 60 / 15 = grid size 4
+        $size = 60 / $step;
+        // side, vertical or horizontal
+        $side = $this->getTimetable()->getSide();
+        $placesCount = $this->getTimetable()->getPlaces()->count() + 2;
+
         $timeStart = $startDate->getTimestamp();
 
         $headers = [];
         while ($startDate < $endDate) {
             $start = ($startDate->getTimestamp() - $timeStart) / $minutes + 2;
+            $end = $start + 4;
+
+            if ('vertical' === $side) {
+                $class = "grid-column: $start / $end; grid-row: 1;";
+                $line = "grid-column: $start / $end; grid-row: 1 / $placesCount;";
+            } else {
+                $class = "grid-row: $start / $end; grid-column: 1;";
+                $line = "grid-row: $start / $end; grid-column: 1 / $placesCount;";
+            }
+
             $headers[] = [
                 'date' => clone $startDate,
                 'start' => $start,
                 'end' => $start + 4,
+                'class' => $class,
+                'line' => $line,
             ];
 
             $startDate->modify('+1 hour');

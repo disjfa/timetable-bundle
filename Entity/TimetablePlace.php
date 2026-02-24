@@ -43,6 +43,8 @@ class TimetablePlace
     #[ORM\OneToMany(targetEntity: TimetableItem::class, mappedBy: 'place')]
     private $items;
 
+    private ?int $index = null;
+
     public function __construct(Timetable $timetable)
     {
         $this->timetable = $timetable;
@@ -90,11 +92,33 @@ class TimetablePlace
         $this->seqnr = $seqnr;
     }
 
+    public function getIndex(): ?int
+    {
+        return $this->index;
+    }
+
+    public function setIndex(?int $index): void
+    {
+        $this->index = $index;
+    }
+
     /**
      * @return TimetableItem[]|ArrayCollection
      */
     public function getItems()
     {
         return $this->items;
+    }
+
+    public function getClass()
+    {
+        $side = $this->getTimetable()->getSide();
+        $index = $this->getIndex();
+
+        if ('vertical' === $side) {
+            return "grid-column: 1; grid-row: $index;";
+        }
+
+        return "grid-row: 1; grid-column: $index;";
     }
 }

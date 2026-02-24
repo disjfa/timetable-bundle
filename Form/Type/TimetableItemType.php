@@ -23,7 +23,15 @@ class TimetableItemType extends AbstractType
 
         $builder->add('description', TextareaType::class, [
             'required' => false,
-            'label' => 'form.timetable.label.about',
+            'label' => 'form.timetable.label.description',
+            'attr' => [
+                'data-controller' => 'easymde',
+            ],
+        ]);
+
+        $builder->add('intro', TextareaType::class, [
+            'required' => false,
+            'label' => 'form.timetable.label.intro',
             'attr' => [
                 'data-controller' => 'easymde',
             ],

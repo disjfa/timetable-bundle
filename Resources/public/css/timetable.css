@@ -22,6 +22,24 @@
     border-radius: var(--timetable-box-border-radius);
     padding: var(--timetable-box-padding);
     min-width: var(--timetable-box-min-width);
+    position: relative;
+}
+
+.timetable .line {
+    border: 0;
+    border-style: solid;
+    border-color: var(--timetable-box-title-background-color);
+    opacity: .4;
+}
+
+.timetable.vertical .line {
+    transform: translateX(calc(-1px + (-1 * var(--timetable-gap) / 2)));
+    border-left-width: 2px;
+}
+
+.timetable.horizontal .line {
+    transform: translateY(calc(-1px + (-1 * var(--timetable-gap) / 2)));
+    border-top-width: 2px;
 }
 
 .timetable .box-title {

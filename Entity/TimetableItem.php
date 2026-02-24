@@ -24,6 +24,9 @@ class TimetableItem
     #[ORM\Column(name: 'title', type: 'string')]
     private $title;
 
+    #[ORM\Column(name: 'intro', type: 'text', nullable: true)]
+    private ?string $intro;
+
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     private $description;
 
@@ -89,6 +92,16 @@ class TimetableItem
     public function setTitle($title): void
     {
         $this->title = $title;
+    }
+
+    public function setIntro(?string $intro): void
+    {
+        $this->intro = $intro;
+    }
+
+    public function getIntro(): string
+    {
+        return (string) $this->intro;
     }
 
     public function getDescription()
@@ -165,5 +178,19 @@ class TimetableItem
         $this->end = floor(($this->dateEnd->getTimestamp() - $startDate->getTimestamp()) / $minutes + 2);
 
         return $this->end;
+    }
+
+    public function getClass()
+    {
+        $start = $this->getStart();
+        $end = $this->getEnd();
+        $index = $this->getPlace()->getIndex();
+        $side = $this->getPlace()->getTimetable()->getSide();
+
+        if ('vertical' === $side) {
+            return "grid-column: $start / $end; grid-row: $index;";
+        }
+
+        return "grid-row: $start / $end; grid-column: $index;";
     }
 }

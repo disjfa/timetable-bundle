@@ -28,6 +28,9 @@ class Timetable
     #[ORM\Column(name: 'about', type: 'text', nullable: true)]
     private ?string $about;
 
+    #[ORM\Column(name: 'intro', type: 'text', nullable: true)]
+    private ?string $intro;
+
     #[ORM\Column(name: 'side', type: 'string')]
     private string $side;
 
@@ -109,11 +112,28 @@ class Timetable
         $this->about = $about;
     }
 
+    public function setIntro(?string $intro): void
+    {
+        $this->intro = $intro;
+    }
+
+    public function getIntro(): string
+    {
+        return (string) $this->intro;
+    }
+
     /**
      * @return TimetablePlace[]|ArrayCollection
      */
     public function getPlaces()
     {
+        $index = 2;
+        foreach ($this->places as $place) {
+            $place->setIndex($index);
+
+            ++$index;
+        }
+
         return $this->places;
     }
 

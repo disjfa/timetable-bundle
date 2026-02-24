@@ -21,6 +21,14 @@ class TimetableType extends AbstractType
             'constraints' => new NotBlank(),
         ]);
 
+        $builder->add('intro', TextareaType::class, [
+            'required' => false,
+            'label' => 'form.timetable.label.intro',
+            'attr' => [
+                'data-controller' => 'easymde',
+            ],
+        ]);
+
         $builder->add('about', TextareaType::class, [
             'required' => false,
             'label' => 'form.timetable.label.about',
