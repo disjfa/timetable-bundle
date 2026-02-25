@@ -53,3 +53,9 @@
     min-width: 350px;
     max-width: 768px;
 }
+
+@media print {
+    .container {
+        max-width: 100% !important;
+    }
+}

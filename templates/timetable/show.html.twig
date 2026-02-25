@@ -1,0 +1,11 @@
+{% extends "@DisjfaTimetable/base.html.twig" %}
+
+{% block _disjfa_timetable_content %}
+
+    {% include '@DisjfaTimetable/timetable/_style.html.twig' %}
+
+    <div class="container">
+        {% include '@DisjfaTimetable/timetable/_menu.html.twig' %}
+        {% include '@DisjfaTimetable/timetable/_timetable.html.twig' %}
+    </div>
+{% endblock %}

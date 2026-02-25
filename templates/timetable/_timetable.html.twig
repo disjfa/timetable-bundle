@@ -45,14 +45,16 @@
                             <strong>{{ place.title }}</strong>
                         </div>
                         {% if is_granted('update', timetable) %}
-                            <div class="btn-group d-print-none">
-                                <a href="{{ path('disjfa_timetable_place_edit', {'timetablePlace': place.id}) }}" class="btn btn-sm btn-outline-primary">
+                            <div class="d-print-none">
+                                <a href="{{ path('disjfa_timetable_place_edit', {'timetablePlace': place.id}) }}" class="btn btn-sm btn-outline-primary" title="edit place">
                                     <i class="fas fa-edit"></i>
-                                    edit place
                                 </a>
-                                <a href="{{ path('disjfa_timetable_item_create', {'timetableDate': date.id, 'timetablePlace': place.id}) }}" class="btn btn-sm btn-outline-primary">
+                                <a href="{{ path('disjfa_timetable_item_create', {'timetableDate': date.id, 'timetablePlace': place.id}) }}" class="btn btn-sm btn-outline-primary" title="add time">
                                     <i class="fas fa-plus"></i>
-                                    add time
+
+                                </a>
+                                <a href="{{ path('disjfa_timetable_timetable_date_and_place', {timetable: timetable.id, date: date.id, place: place.id}) }}" class="btn btn-sm btn-outline-primary" title="callsheet">
+                                    <i class="fas fa-file-half-dashed"></i>
                                 </a>
                             </div>
                         {% endif %}

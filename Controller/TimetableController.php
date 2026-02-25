@@ -3,12 +3,19 @@
 namespace Disjfa\TimetableBundle\Controller;
 
 use Disjfa\TimetableBundle\Entity\Timetable;
+use Disjfa\TimetableBundle\Entity\TimetableDate;
+use Disjfa\TimetableBundle\Entity\TimetableItem;
+use Disjfa\TimetableBundle\Entity\TimetablePlace;
 use Disjfa\TimetableBundle\Form\Type\TimetableType;
 use Disjfa\TimetableBundle\Security\TimetableVoter;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
 use Spatie\Color\Hex;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,18 +25,18 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 #[Route(path: '/timetable')]
 class TimetableController extends AbstractController
 {
-    private ManagerRegistry $registry;
+    private EntityManagerInterface $entityManager;
 
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->registry = $registry;
+        $this->entityManager = $entityManager;
     }
 
     #[Route(path: '', name: 'disjfa_timetable_timetable_index')]
     public function indexAction(#[CurrentUser] ?UserInterface $user = null)
     {
-        return $this->render('@DisjfaTimetable/Timetable/index.html.twig', [
-            'timetables' => $this->registry->getRepository(Timetable::class)->findAllByOptions(user: $user),
+        return $this->render('@DisjfaTimetable/timetable/index.html.twig', [
+            'timetables' => $this->entityManager->getRepository(Timetable::class)->findAllByOptions(user: $user),
         ]);
     }
 
@@ -55,14 +62,35 @@ class TimetableController extends AbstractController
     /**
      * @return Response
      */
-    #[Route(path: '/{timetable}/show', name: 'disjfa_timetable_timetable_show')]
+    #[Route(path: '/{timetable}', name: 'disjfa_timetable_timetable_show')]
     public function showAction(Timetable $timetable)
     {
         $this->denyAccessUnlessGranted(TimetableVoter::VIEW, $timetable);
 
-        return $this->render('@DisjfaTimetable/Timetable/show.html.twig', [
+        return $this->render('@DisjfaTimetable/timetable/show.html.twig', [
             'timetable' => $timetable,
         ]);
+    }
+
+    #[Route(path: '/{timetable}/manifest.webmanifest', name: 'disjfa_timetable_timetable_manifest')]
+    public function manifestAction(Timetable $timetable): Response
+    {
+        $projectDir = $this->getParameter('kernel.project_dir');
+        try {
+            $manifest = new File($projectDir.'/public/favicons/manifest.webmanifest');
+            $json = json_decode($manifest->getContent(), true);
+        } catch (FileNotFoundException $e) {
+            $json = [];
+        }
+
+        $json['name'] = $timetable->getTitle();
+        $json['short_name'] = $timetable->getTitle();
+        $json['description'] = $timetable->getIntro();
+        $json['start_url'] = $this->generateUrl('disjfa_timetable_timetable_show', ['timetable' => $timetable->getId(), 'homescreen' => 1]);
+        $json['theme_color'] = $timetable->getHeaderBg();
+        $json['background_color'] = $timetable->getBodyBg();
+
+        return new JsonResponse($json);
     }
 
     #[Route(path: '/{timetable}/about', name: 'disjfa_timetable_timetable_about')]
@@ -70,7 +98,7 @@ class TimetableController extends AbstractController
     {
         $this->denyAccessUnlessGranted(TimetableVoter::VIEW, $timetable);
 
-        return $this->render('@DisjfaTimetable/Timetable/about.html.twig', [
+        return $this->render('@DisjfaTimetable/timetable/about.html.twig', [
             'timetable' => $timetable,
         ]);
     }
@@ -88,6 +116,54 @@ class TimetableController extends AbstractController
         return $this->handleForm($form, $request);
     }
 
+    #[Route(path: '/{timetable}/{date}/{place}', name: 'disjfa_timetable_timetable_date_and_place')]
+    public function dateAndPlaceAction(Request $request, Timetable $timetable, TimetableDate $date, TimetablePlace $place)
+    {
+        $this->denyAccessUnlessGranted(TimetableVoter::VIEW, $timetable);
+
+        if (false === $timetable->getDates()->contains($date)) {
+            throw $this->createAccessDeniedException('Date does not compute');
+        }
+        if (false === $timetable->getPlaces()->contains($place)) {
+            throw $this->createAccessDeniedException('Date does not compute');
+        }
+
+        $currentDate = new \DateTime($request->query->get('date', 'now'));
+        $setPrevious = true;
+
+        $previous = null;
+        $current = null;
+        $nextItems = new ArrayCollection();
+        foreach ($date->getItems() as $item) {
+            /** @var TimetableItem $item */
+            if ($item->getDateEnd() > $currentDate) {
+                $setPrevious = false;
+            }
+
+            if ($setPrevious) {
+                $previous = $item;
+            }
+
+            if ($item->getDateStart() > $currentDate) {
+                $nextItems->add($item);
+            }
+
+            if ($item->getDateStart() < $currentDate && $item->getDateEnd() > $currentDate) {
+                $current = $item;
+            }
+        }
+
+        return $this->render('@DisjfaTimetable/timetable/sheet.html.twig', [
+            'timetable' => $timetable,
+            'date' => $date,
+            'place' => $place,
+            'currentDate' => $currentDate,
+            'previous' => $previous,
+            'current' => $current,
+            'nextItems' => $nextItems,
+        ]);
+    }
+
     /**
      * @return Response
      */
@@ -98,9 +174,8 @@ class TimetableController extends AbstractController
             /** @var Timetable $timetable */
             $timetable = $form->getData();
 
-            $entitymanager = $this->registry->getManager();
-            $entitymanager->persist($timetable);
-            $entitymanager->flush();
+            $this->entityManager->persist($timetable);
+            $this->entityManager->flush();
 
             $this->addFlash('success', 'timetable.flash.timetable_saved');
 
@@ -109,7 +184,7 @@ class TimetableController extends AbstractController
             ]);
         }
 
-        return $this->render('@DisjfaTimetable/Timetable/form.html.twig', [
+        return $this->render('@DisjfaTimetable/timetable/form.html.twig', [
             'form' => $form->createView(),
             'timetable' => $form->getData(),
         ]);

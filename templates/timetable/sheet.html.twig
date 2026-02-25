@@ -1,0 +1,121 @@
+{% extends "@DisjfaTimetable/base.html.twig" %}
+
+{% block _disjfa_timetable_content %}
+    {% include '@DisjfaTimetable/timetable/_style.html.twig' %}
+
+    <br>
+    <div class="timetable">
+        <div class="container ">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{{ path('disjfa_timetable_timetable_show', {timetable: timetable.id}) }}">
+                            {{ timetable.title }}
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        {{ place.title }}
+                    </li>
+                </ol>
+            </nav>
+            <div class="breadcrumbs">
+
+
+            </div>
+            <div class="box-title p-3 rounded">
+                <h1>
+                    {{ place.title }}
+                </h1>
+                <h5>{{ currentDate | date('l j F H:i') }}</h5>
+
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-5">
+                    <em>Previous</em>
+                    <br>
+                    {% if previous %}
+                        <h5>
+                            {{ previous.title }}
+                            <i class="fa fa-fw fa-clock"></i>
+                            {{ previous.dateStart | date('H:i') }}
+                            /
+                            <i class="fa fa-fw fa-alarm-clock"></i>
+                            {{ previous.dateEnd | date('H:i') }}
+                        </h5>
+                    {% else %}
+                        - none-
+                    {% endif %}
+                    <br><br>
+                    <div class="box-title p-3 rounded">
+                        <em>Current</em>
+                        <br>
+                        {% if current %}
+                            <h5>
+                                {{ current.title }}
+                                <i class="fa fa-fw fa-clock"></i>
+                                {{ current.dateStart | date('H:i') }}
+                                /
+                                <i class="fa fa-fw fa-alarm-clock"></i>
+                                {{ current.dateEnd | date('H:i') }}
+                            </h5>
+                        {% else %}
+                            - none-
+                        {% endif %}
+                    </div>
+                    <br>
+                    <br>
+                    <em>Upcomming</em>
+                    <br>
+                    {% for item in nextItems %}
+                        <h5 class="bg-info p-3 rounded">
+                            {{ item.title }}
+                            <i class="fa fa-fw fa-clock"></i>
+                            {{ item.dateStart | date('H:i') }}
+                            /
+                            <i class="fa fa-fw fa-alarm-clock"></i>
+                            {{ item.dateEnd | date('H:i') }}
+                        </h5>
+                    {% else %}
+                        - none -
+                    {% endfor %}
+                </div>
+                <div class="col-12 col-md-7">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Item</th>
+                                <th class="text-center">Start</th>
+                                <th class="text-center">End</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in date.items %}
+                                <tr>
+                                    <td>
+                                        {% if item.place.id == place.id %}
+                                            <i class="fa fa-fw fa-circle-down"></i>
+                                        {% endif %}
+                                    </td>
+                                    <td class="w-75">{{ item.title }}</td>
+                                    <td class="text-nowrap text-end">
+                                        <i class="fa fa-fw fa-clock"></i>
+                                        {{ item.dateStart | date('H:i') }}
+                                    </td>
+                                    <td class="text-nowrap text-end">
+                                        <i class="fa fa-fw fa-alarm-clock"></i>
+                                        {{ item.dateEnd | date('H:i') }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

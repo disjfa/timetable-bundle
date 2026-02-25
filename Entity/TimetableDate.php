@@ -35,6 +35,7 @@ class TimetableDate
      * @var TimetableItem[]|ArrayCollection
      */
     #[ORM\OneToMany(targetEntity: TimetableItem::class, mappedBy: 'date')]
+    #[ORM\OrderBy(['dateStart' => 'ASC'])]
     private $items;
 
     /**
