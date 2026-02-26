@@ -11,37 +11,93 @@
             {% endif %}
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Places</th>
-                    <th>Dates</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for timetable in timetables %}
-                    <tr>
-                        <td>
-                            <a href="{{ path('disjfa_timetable_timetable_show', {'timetable': timetable.id}) }}">
-                                {{ timetable.title }}
-                            </a>
-                        </td>
-                        <td>
-                            {% for place in timetable.places %}
-                                {{ place.title }}{% if not loop.last %}, {% endif %}
-                            {% endfor %}
-                        </td>
-                        <td>
-                            {% for date in timetable.dates %}
-                                {{ date.title }}{% if not loop.last %}, {% endif %}
-                            {% endfor %}
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+        {% if app.user %}
+            <div class="py-3">
+                <p class="lead">
+                    Browse and manage your timetables below. Click on any timetable to view its details, or create a
+                    new one to get started.
+                </p>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Places</th>
+                            <th>Dates</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for timetable in timetables %}
+                            <tr>
+                                <td>
+                                    <a href="{{ path('disjfa_timetable_timetable_show', {'timetable': timetable.id}) }}">
+                                        {{ timetable.title }}
+                                    </a>
+                                </td>
+                                <td>
+                                    {% for place in timetable.places %}
+                                        {{ place.title }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    {% for date in timetable.dates %}
+                                        {{ date.title }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="3"><em>No timetables found, yet.</em></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% else %}
+            <p class="lead">Login and create you own!</p>
+        {% endif %}
+    </div>
+    {% if demoTimetables %}
+        <div class="bg-body-tertiary">
+            <div class="container py-3">
+                <h4>Demo Timetables</h4>
+                <p>Check out these sample timetables to see what you can create:</p>
+
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Places</th>
+                            <th>Dates</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for timetable in demoTimetables %}
+                            <tr>
+                                <td>
+                                    <a href="{{ path('disjfa_timetable_timetable_show', {'timetable': timetable.id}) }}">
+                                        {{ timetable.title }}
+                                    </a>
+                                </td>
+                                <td>
+                                    {% for place in timetable.places %}
+                                        {{ place.title }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    {% for date in timetable.dates %}
+                                        {{ date.title }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
+    {% endif %}
     </div>
 {% endblock %}

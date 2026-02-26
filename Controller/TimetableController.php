@@ -2,12 +2,14 @@
 
 namespace Disjfa\TimetableBundle\Controller;
 
+use App\Entity\Settings;
 use Disjfa\TimetableBundle\Entity\Timetable;
 use Disjfa\TimetableBundle\Entity\TimetableDate;
 use Disjfa\TimetableBundle\Entity\TimetableItem;
 use Disjfa\TimetableBundle\Entity\TimetablePlace;
 use Disjfa\TimetableBundle\Form\Type\TimetableType;
 use Disjfa\TimetableBundle\Security\TimetableVoter;
+use Disjfa\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Spatie\Color\Hex;
@@ -35,8 +37,23 @@ class TimetableController extends AbstractController
     #[Route(path: '', name: 'disjfa_timetable_timetable_index')]
     public function indexAction(#[CurrentUser] ?UserInterface $user = null)
     {
+        $timetables = [];
+        $demoTimetables = [];
+        if ($user) {
+            $timetables = $this->entityManager->getRepository(Timetable::class)->findAllByOptions(user: $user);
+        }
+
+        $demoUser = $this->entityManager->getRepository(Settings::class)->findOneBy(['type' => 'demo_user']);
+        if ($demoUser->getValue()) {
+            $user = $this->entityManager->getRepository(User::class)->find($demoUser->getValue());
+            if ($user) {
+                $demoTimetables = $this->entityManager->getRepository(Timetable::class)->findAllByOptions(user: $user);
+            }
+        }
+
         return $this->render('@DisjfaTimetable/timetable/index.html.twig', [
-            'timetables' => $this->entityManager->getRepository(Timetable::class)->findAllByOptions(user: $user),
+            'timetables' => $timetables,
+            'demoTimetables' => $demoTimetables,
         ]);
     }
 
