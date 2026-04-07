@@ -56,6 +56,8 @@ class TimetableType extends AbstractType
             ],
             'expanded' => true,
         ]);
+
+        $builder->add('public');
     }
 
     public function configureOptions(OptionsResolver $resolver)

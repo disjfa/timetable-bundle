@@ -56,7 +56,11 @@ class TimetableVoter extends Voter
 
     private function canView(Timetable $timetable, ?UserInterface $user): bool
     {
-        return true;
+        if ($user && $timetable->getUsers()->contains($user)) {
+            return true;
+        }
+
+        return $timetable->isPublic();
     }
 
     private function canUpdate(Timetable $timetable, UserInterface $user): bool

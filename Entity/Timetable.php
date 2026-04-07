@@ -34,6 +34,9 @@ class Timetable
     #[ORM\Column(name: 'side', type: 'string')]
     private string $side;
 
+    #[ORM\Column(name: 'public', type: 'boolean', options: ['default' => true])]
+    private bool $public = true;
+
     /**
      * @var TimetablePlace[]|ArrayCollection
      */
@@ -211,5 +214,15 @@ class Timetable
     public function removeUser(UserEntityInterface $user): void
     {
         $this->users->removeElement($user);
+    }
+
+    public function isPublic(): bool
+    {
+        return $this->public;
+    }
+
+    public function setPublic(bool $public): void
+    {
+        $this->public = $public;
     }
 }
