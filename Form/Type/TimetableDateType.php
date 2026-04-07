@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class TimetableDateType extends AbstractType
 {
@@ -21,14 +22,18 @@ class TimetableDateType extends AbstractType
         ]);
 
         $builder->add('dateAt', DateType::class, [
+            'label' => 'form.timetable_date.label.date_at',
             'required' => false,
             'html5' => false,
             'widget' => 'single_text',
             'format' => 'yyyy-MM-dd',
-            'constraints' => new DateTime([
-                'format' => 'Y-m-d',
-                'groups' => 'string',
-            ]),
+            'constraints' => [
+                new NotNull(),
+                new DateTime([
+                    'format' => 'Y-m-d',
+                    'groups' => 'string',
+                ]),
+            ],
             'attr' => [
                 'data-controller' => 'flatpickr',
                 'data-format' => 'Y-m-d',

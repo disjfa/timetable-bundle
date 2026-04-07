@@ -59,9 +59,8 @@ class TimetableDate
      */
     private $headers;
 
-    public function __construct(Timetable $timetable)
+    public function __construct()
     {
-        $this->timetable = $timetable;
         $this->dateAt = new \DateTime();
     }
 
@@ -101,7 +100,7 @@ class TimetableDate
         return $this->dateAt;
     }
 
-    public function setDateAt(\DateTime $dateAt): void
+    public function setDateAt(?\DateTime $dateAt): void
     {
         $this->dateAt = $dateAt;
     }

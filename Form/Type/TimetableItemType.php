@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class TimetableItemType extends AbstractType
@@ -37,6 +38,16 @@ class TimetableItemType extends AbstractType
             ],
         ]);
 
+        $dateAt = new DateTime();
+        $timeTableItem = $options['data'];
+        if ($timeTableItem instanceof TimetableItem) {
+            $dateAt = $timeTableItem->getDate()->getDateAt();
+        }
+        $minDate = clone $dateAt;
+        $minDate->setTime(0, 0, 0);
+        $maxDate = clone $minDate;
+        $maxDate->add(new \DateInterval('P1D'));
+
         $builder->add('dateStart', DateType::class, [
             'label' => 'form.timetable_item.label.date_start',
             'html5' => false,
@@ -49,6 +60,8 @@ class TimetableItemType extends AbstractType
             'attr' => [
                 'data-controller' => 'flatpickr',
                 'data-format' => 'Y-m-d H:i',
+                'data-min-date' => $minDate->format('Y-m-d H:i'),
+                'data-max-date' => $maxDate->format('Y-m-d H:i'),
             ],
         ]);
 
@@ -57,13 +70,20 @@ class TimetableItemType extends AbstractType
             'html5' => false,
             'widget' => 'single_text',
             'format' => 'yyyy-MM-dd HH:mm',
-            'constraints' => new DateTime([
-                'format' => 'Y-m-d H:i',
-                'groups' => 'string',
-            ]),
+            'constraints' => [
+                new DateTime([
+                    'format' => 'Y-m-d H:i',
+                    'groups' => 'string',
+                ]),
+                new GreaterThan([
+                    'propertyPath' => 'parent.all[dateStart].data',
+                ]),
+            ],
             'attr' => [
                 'data-controller' => 'flatpickr',
                 'data-format' => 'Y-m-d H:i',
+                'data-min-date' => $minDate->format('Y-m-d H:i'),
+                'data-max-date' => $maxDate->format('Y-m-d H:i'),
             ],
         ]);
     }

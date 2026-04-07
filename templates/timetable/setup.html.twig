@@ -1,0 +1,38 @@
+{% extends "@DisjfaTimetable/base.html.twig" %}
+
+{% block _disjfa_timetable_content %}
+
+    {% include '@DisjfaTimetable/timetable/_style.html.twig' %}
+
+    <div class="container py-4">
+        {% include '@DisjfaTimetable/timetable/_menu.html.twig' %}
+
+        <h1>{{ timetable.title }}</h1>
+
+        {{ form_start(form) }}
+
+        <div class="row">
+            <div class="col-12 col-md-6" data-controller="collectiontype">
+                <h3>Dates</h3>
+                <p>Here you can manage and add dates of the current timetable.</p>
+                {{ form_widget(form.dates) }}
+                <button type="button" class="btn btn-outline-primary" data-action="click->collectiontype#add">
+                    Add date
+                </button>
+            </div>
+            <div class="col-12 col-md-6" data-controller="collectiontype">
+                <h3>Places</h3>
+                <p>Add places, locations, stages. Use the sequence to order them.</p>
+                {{ form_widget(form.places) }}
+                <button type="button" class="btn btn-outline-primary" data-action="click->collectiontype#add">
+                    Add place
+                </button>
+            </div>
+        </div>
+        {{ form_rest(form) }}
+        <br>
+        <button type="submit" class="btn btn-primary">save</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+

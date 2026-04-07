@@ -65,7 +65,17 @@ class TimetableItem
     public function __construct(TimetablePlace $place, TimetableDate $date)
     {
         $dateStart = clone $date->getDateAt()->setTime(12, 00);
-        $dateEnd = clone $date->getDateAt()->setTime(13, 00);
+        foreach ($date->getItems() as $item) {
+            if ($item->getPlace()->getId() === $place->getId()) {
+                if ($item->getDateEnd() > $dateStart) {
+                    $dateStart = clone $item->getDateEnd();
+                    $dateStart->modify('+1 hour');
+                }
+            }
+        }
+
+        $dateEnd = clone $dateStart;
+        $dateEnd->modify('+1 hour');
 
         $this->place = $place;
         $this->date = $date;

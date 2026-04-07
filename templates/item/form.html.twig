@@ -7,6 +7,14 @@
     <div class="container py-4">
         {% include '@DisjfaTimetable/timetable/_menu.html.twig' %}
 
+        <h3>{{ timetable.title }}</h3>
+        Place:
+        <strong>{{ item.place.title }}</strong>
+        -
+        Date:
+        <strong>{{ item.date.dateAt | date }}</strong>
+        <hr>
+
         {{ form_start(form) }}
 
         <div class="row">

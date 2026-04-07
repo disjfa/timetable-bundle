@@ -7,6 +7,7 @@ use Disjfa\TimetableBundle\Entity\Timetable;
 use Disjfa\TimetableBundle\Entity\TimetableDate;
 use Disjfa\TimetableBundle\Entity\TimetableItem;
 use Disjfa\TimetableBundle\Entity\TimetablePlace;
+use Disjfa\TimetableBundle\Form\Type\TimetableSetupType;
 use Disjfa\TimetableBundle\Form\Type\TimetableType;
 use Disjfa\TimetableBundle\Security\TimetableVoter;
 use Disjfa\UserBundle\Entity\User;
@@ -73,7 +74,7 @@ class TimetableController extends AbstractController
 
         $form = $this->createForm(TimetableType::class, $timeTable);
 
-        return $this->handleForm($form, $request);
+        return $this->handleForm($form, $request, true);
     }
 
     /**
@@ -133,6 +134,46 @@ class TimetableController extends AbstractController
         return $this->handleForm($form, $request);
     }
 
+    #[Route(path: '/{timetable}/setup', name: 'disjfa_timetable_timetable_setup')]
+    public function setupAction(Request $request, Timetable $timetable)
+    {
+        $this->denyAccessUnlessGranted(TimetableVoter::UPDATE, $timetable);
+
+        if (0 === $timetable->getDates()->count()) {
+            $timetable->setDates(new ArrayCollection([new TimetableDate()]));
+        }
+        if (0 === $timetable->getPlaces()->count()) {
+            $timetable->setPlaces(new ArrayCollection([new TimetablePlace()]));
+        }
+
+        $form = $this->createForm(TimetableSetupType::class, $timetable);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $dates = $timetable->getDates();
+            foreach ($dates as $date) {
+                $date->setTimetable($timetable);
+            }
+            $places = $timetable->getPlaces();
+            foreach ($places as $place) {
+                $place->setTimetable($timetable);
+            }
+            $this->entityManager->persist($timetable);
+            $this->entityManager->flush();
+
+            $this->addFlash('success', 'timetable.flash.timetable_saved');
+
+            return $this->redirectToRoute('disjfa_timetable_timetable_show', [
+                'timetable' => $timetable->getId(),
+            ]);
+        }
+
+        return $this->render('@DisjfaTimetable/timetable/setup.html.twig', [
+            'form' => $form,
+            'timetable' => $timetable,
+        ]);
+    }
+
     #[Route(path: '/{timetable}/{date}/{place}', name: 'disjfa_timetable_timetable_date_and_place')]
     public function dateAndPlaceAction(Request $request, Timetable $timetable, TimetableDate $date, TimetablePlace $place)
     {
@@ -184,7 +225,7 @@ class TimetableController extends AbstractController
     /**
      * @return Response
      */
-    private function handleForm(FormInterface $form, Request $request)
+    private function handleForm(FormInterface $form, Request $request, bool $toSetup = false)
     {
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -195,6 +236,12 @@ class TimetableController extends AbstractController
             $this->entityManager->flush();
 
             $this->addFlash('success', 'timetable.flash.timetable_saved');
+
+            if ($toSetup) {
+                return $this->redirectToRoute('disjfa_timetable_timetable_setup', [
+                    'timetable' => $timetable->getId(),
+                ]);
+            }
 
             return $this->redirectToRoute('disjfa_timetable_timetable_show', [
                 'timetable' => $timetable->getId(),

@@ -22,6 +22,7 @@ class TimetablePlaceType extends AbstractType
         $builder->add('seqnr', NumberType::class, [
             'label' => 'form.timetable_place.label.seqnr',
             'constraints' => new NotBlank(),
+            'html5' => true,
         ]);
     }
 

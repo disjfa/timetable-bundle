@@ -37,14 +37,14 @@ class Timetable
     /**
      * @var TimetablePlace[]|ArrayCollection
      */
-    #[ORM\OneToMany(targetEntity: TimetablePlace::class, mappedBy: 'timetable')]
+    #[ORM\OneToMany(targetEntity: TimetablePlace::class, mappedBy: 'timetable', cascade: ['persist', 'remove'])]
     #[ORM\OrderBy(['seqnr' => 'ASC'])]
     private $places;
 
     /**
      * @var TimetableDate[]|ArrayCollection
      */
-    #[ORM\OneToMany(targetEntity: TimetableDate::class, mappedBy: 'timetable')]
+    #[ORM\OneToMany(targetEntity: TimetableDate::class, mappedBy: 'timetable', cascade: ['persist', 'remove'])]
     #[ORM\OrderBy(['dateAt' => 'ASC'])]
     private $dates;
 
@@ -137,12 +137,22 @@ class Timetable
         return $this->places;
     }
 
+    public function setPlaces(Collection $places): void
+    {
+        $this->places = $places;
+    }
+
     /**
      * @return TimetableDate[]|ArrayCollection
      */
     public function getDates()
     {
         return $this->dates;
+    }
+
+    public function setDates(Collection $dates): void
+    {
+        $this->dates = $dates;
     }
 
     public function getSide(): string

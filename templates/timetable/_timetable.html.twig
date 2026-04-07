@@ -1,19 +1,16 @@
 <h1>
     {{ timetable.title }}
-    {% if is_granted('update', timetable) %}
-        <a href="{{ path('disjfa_timetable_timetable_edit', {'timetable': timetable.id}) }}">
-            <i class="fas fa-edit"></i>
-        </a>
-    {% endif %}
 </h1>
 {{ timetable.intro | markdown_to_html }}
 {% if is_granted('update', timetable) %}
     <div class="btn-group d-print-none">
-        <a href="{{ path('disjfa_timetable_date_create', {'timetable': timetable.id}) }}" class="btn btn-sm btn-outline-primary">
-            Add date
+        <a href="{{ path('disjfa_timetable_timetable_edit', {'timetable': timetable.id}) }}" class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-edit"></i>
+            edit timetable
         </a>
-        <a href="{{ path('disjfa_timetable_place_create', {'timetable': timetable.id}) }}" class="btn btn-sm btn-outline-primary">
-            Add place
+        <a href="{{ path('disjfa_timetable_timetable_setup', {'timetable': timetable.id}) }}" class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-gear"></i>
+            setup dates and places
         </a>
     </div>
 {% endif %}
@@ -21,11 +18,6 @@
     <div class="py-3">
         <h3>
             {{ date.title }}
-            {% if is_granted('update', timetable) %}
-                <a href="{{ path('disjfa_timetable_date_edit', {'timetableDate': date.id}) }}" class="d-print-none">
-                    <i class="fas fa-edit"></i>
-                </a>
-            {% endif %}
         </h3>
         {{ date.dateAt | date }}
         <div class="table-responsive">
@@ -46,15 +38,13 @@
                         </div>
                         {% if is_granted('update', timetable) %}
                             <div class="d-print-none">
-                                <a href="{{ path('disjfa_timetable_place_edit', {'timetablePlace': place.id}) }}" class="btn btn-sm btn-outline-primary" title="edit place">
-                                    <i class="fas fa-edit"></i>
-                                </a>
                                 <a href="{{ path('disjfa_timetable_item_create', {'timetableDate': date.id, 'timetablePlace': place.id}) }}" class="btn btn-sm btn-outline-primary" title="add time">
                                     <i class="fas fa-plus"></i>
-
+                                    add time
                                 </a>
                                 <a href="{{ path('disjfa_timetable_timetable_date_and_place', {timetable: timetable.id, date: date.id, place: place.id}) }}" class="btn btn-sm btn-outline-primary" title="callsheet">
                                     <i class="fas fa-file-half-dashed"></i>
+                                    callsheet
                                 </a>
                             </div>
                         {% endif %}
@@ -65,9 +55,11 @@
                                 <strong class="d-flex justify-content-between align-items-center">
                                     <div>
                                         {{ item.title }}
-                                        <button class="btn btn-sm btn-outline-success d-print-none" commandfor="item-{{ item.id }}-dialog" command="show-modal">
-                                            <i class="fa-solid fa-fw fa-circle-info"></i>
-                                        </button>
+                                        {% if item.description %}
+                                            <button class="btn btn-sm btn-outline-success d-print-none" commandfor="item-{{ item.id }}-dialog" command="show-modal">
+                                                <i class="fa-solid fa-fw fa-circle-info"></i>
+                                            </button>
+                                        {% endif %}
                                     </div>
                                     <a {{ stimulus_target('like-item', 'star') }} {{ stimulus_action('like-item', 'like', 'click') }} href="#" class="btn btn-sm btn-outline-success">
                                         <i class="fa-regular fa-fw fa-star"></i>
@@ -88,6 +80,7 @@
                                             <i class="fa-regular fa-fw fa-star"></i>
                                         </a>
                                         <small class="text-muted">
+                                            <i class="fa fa-clock"></i>
                                             {{ item.dateStart | date('H:i') }}
                                             / {{ item.dateEnd | date('H:i') }}
                                         </small>
@@ -96,6 +89,7 @@
                                 </dialog>
                                 <div>
                                     <small class="text-muted">
+                                        <i class="fa fa-clock"></i>
                                         {{ item.dateStart | date('H:i') }}
                                         / {{ item.dateEnd | date('H:i') }}
                                     </small>

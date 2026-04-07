@@ -45,9 +45,8 @@ class TimetablePlace
 
     private ?int $index = null;
 
-    public function __construct(Timetable $timetable)
+    public function __construct()
     {
-        $this->timetable = $timetable;
         $this->seqnr = 0;
     }
 

@@ -3,10 +3,12 @@
     {% if timetable.bodyBg %} --bs-body-bg: {{ timetable.bodyBg }};
         --bs-body-color: {{ timetable.bodyBg | contrast }};
         --bs-emphasis-color: {{ timetable.bodyBg | contrast }};
+        --form-control-color: var(--bs-dark);
     {% endif %}{% if timetable.headerBg %} --timetable-box-title-background-color: {{ timetable.headerBg }};
         --timetable-box-title-color: {{ timetable.headerBg | contrast }};
     {% endif %}{% if timetable.boxBg %} --timetable-box-background-color: {{ timetable.boxBg }};
         --timetable-box-color: {{ timetable.boxBg | contrast }};
+        --bs-border-color: {{ timetable.boxBg }};
     {% endif %}
     }
 </style>
