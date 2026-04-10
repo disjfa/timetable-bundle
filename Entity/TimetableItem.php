@@ -114,9 +114,9 @@ class TimetableItem
         return (string) $this->intro;
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
-        return $this->description;
+        return (string) $this->description;
     }
 
     public function setDescription($description): void
