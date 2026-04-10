@@ -88,7 +88,7 @@
                                             Close
                                         </button>
                                     </div>
-                                    <div>
+                                    <div class="pb-2">
                                         <a {{ stimulus_target('like-item', 'star') }} {{ stimulus_action('like-item', 'like', 'click') }} href="#" class="btn btn-sm btn-outline-success">
                                             <i class="fa-regular fa-fw fa-star"></i>
                                         </a>
@@ -98,7 +98,7 @@
                                             / {{ item.dateEnd | date('H:i') }}
                                         </small>
                                     </div>
-                                    {{ item.description }}
+                                    {{ item.description | markdown_to_html }}
                                 </dialog>
                                 <div>
                                     <small class="text-muted">
