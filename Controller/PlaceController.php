@@ -41,6 +41,45 @@ class PlaceController extends AbstractController
         return $this->handleForm($form, $request);
     }
 
+    #[Route(path: '/{timetablePlace}/delete', name: 'disjfa_timetable_place_delete', methods: ['GET', 'POST'])]
+    public function deleteAction(Request $request, TimetablePlace $timetablePlace)
+    {
+        $this->denyAccessUnlessGranted(TimetableVoter::UPDATE, $timetablePlace->getTimetable());
+
+        $timetable = $timetablePlace->getTimetable();
+
+        if ($timetablePlace->getItems()->count()) {
+            $this->addFlash('info', 'timetable.flash.timetable_place_cannot_delete');
+
+            return $this->redirectToRoute('disjfa_timetable_timetable_show', [
+                'timetable' => $timetable->getId(),
+            ]);
+        }
+
+        $form = $this->createFormBuilder($timetablePlace)
+            ->setAction($this->generateUrl('disjfa_timetable_place_delete', ['timetablePlace' => $timetablePlace->getId()]))
+            ->setMethod('POST')
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->remove($timetablePlace);
+            $this->entityManager->flush();
+
+            $this->addFlash('success', 'timetable.flash.timetable_place_deleted');
+
+            return $this->redirectToRoute('disjfa_timetable_timetable_show', [
+                'timetable' => $timetable->getId(),
+            ]);
+        }
+
+        return $this->render('@DisjfaTimetable/place/delete.html.twig', [
+            'place' => $timetablePlace,
+            'timetable' => $timetable,
+            'form' => $form->createView(),
+        ]);
+    }
+
     private function handleForm(FormInterface $form, Request $request)
     {
         $form->handleRequest($request);

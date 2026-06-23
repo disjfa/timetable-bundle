@@ -22,13 +22,21 @@
                 {{ form_row(form.title) }}
                 {{ form_row(form.intro) }}
                 {{ form_row(form.description) }}
-                <button type="submit" class="btn btn-primary">save</button>
             </div>
             <div class="col-12 col-md-4">
                 {{ form_rest(form) }}
-                <button type="submit" class="btn btn-primary">save</button>
             </div>
         </div>
+        <div class="row">
+            <div class="col-12 justify-content-between d-flex">
+                <button type="submit" class="btn btn-primary">save</button>
+                {% if item.id %}
+                    <a href="{{ path('disjfa_timetable_item_delete', {timetableItem: item.id}) }}" class="btn btn-danger">Delete</a>
+                {% endif %}
+            </div>
+        </div>
+
+
         {{ form_end(form) }}
     </div>
 {% endblock %}

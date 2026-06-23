@@ -29,10 +29,7 @@ class TimetableDateType extends AbstractType
             'format' => 'yyyy-MM-dd',
             'constraints' => [
                 new NotNull(),
-                new DateTime([
-                    'format' => 'Y-m-d',
-                    'groups' => 'string',
-                ]),
+                new DateTime(format: 'Y-m-d', groups: ['string']),
             ],
             'attr' => [
                 'data-controller' => 'flatpickr',

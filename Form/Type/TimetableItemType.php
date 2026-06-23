@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\DateTime;
-use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class TimetableItemType extends AbstractType
@@ -53,10 +53,7 @@ class TimetableItemType extends AbstractType
             'html5' => false,
             'widget' => 'single_text',
             'format' => 'yyyy-MM-dd HH:mm',
-            'constraints' => new DateTime([
-                'format' => 'Y-m-d H:i',
-                'groups' => 'string',
-            ]),
+            'constraints' => new DateTime(format: 'Y-m-d H:i', groups: ['string']),
             'attr' => [
                 'data-controller' => 'flatpickr',
                 'data-format' => 'Y-m-d H:i',
@@ -71,13 +68,8 @@ class TimetableItemType extends AbstractType
             'widget' => 'single_text',
             'format' => 'yyyy-MM-dd HH:mm',
             'constraints' => [
-                new DateTime([
-                    'format' => 'Y-m-d H:i',
-                    'groups' => 'string',
-                ]),
-                new GreaterThan([
-                    'propertyPath' => 'parent.all[dateStart].data',
-                ]),
+                new DateTime(format: 'Y-m-d H:i', groups: ['string']),
+                new GreaterThanOrEqual(propertyPath: 'parent.all[dateStart].data'),
             ],
             'attr' => [
                 'data-controller' => 'flatpickr',

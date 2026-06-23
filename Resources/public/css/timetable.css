@@ -25,6 +25,23 @@
     position: relative;
 }
 
+.timetable .box.box-line {
+    padding: 0;
+    border-width: 1px 0 0 0;
+}
+
+.timetable .box-line .box-line-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 1px 5px;
+    font-size: .8rem;
+    text-align: center;
+    background-color: var(--timetable-box-background-color);
+    color: var(--timetable-box-color);
+    border-radius: var(--timetable-box-border-radius) var(--timetable-box-border-radius) 0 0;
+}
+
 .timetable .line {
     border: 0;
     border-style: solid;

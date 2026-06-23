@@ -42,6 +42,36 @@ class ItemController extends AbstractController
         return $this->handleForm($form, $request);
     }
 
+    #[Route(path: '/{timetableItem}/delete', name: 'disjfa_timetable_item_delete', methods: ['GET', 'POST'])]
+    public function deleteAction(Request $request, TimetableItem $timetableItem)
+    {
+        $this->denyAccessUnlessGranted(TimetableVoter::UPDATE, $timetableItem->getDate()->getTimetable());
+
+        $timetable = $timetableItem->getPlace()->getTimetable();
+        $form = $this->createFormBuilder($timetableItem)
+            ->setAction($this->generateUrl('disjfa_timetable_item_delete', ['timetableItem' => $timetableItem->getId()]))
+            ->setMethod('POST')
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->remove($timetableItem);
+            $this->entityManager->flush();
+
+            $this->addFlash('success', 'timetable.flash.timetable_item_deleted');
+
+            return $this->redirectToRoute('disjfa_timetable_timetable_show', [
+                'timetable' => $timetable->getId(),
+            ]);
+        }
+
+        return $this->render('@DisjfaTimetable/item/delete.html.twig', [
+            'item' => $timetableItem,
+            'timetable' => $timetable,
+            'form' => $form->createView(),
+        ]);
+    }
+
     private function handleForm(FormInterface $form, Request $request)
     {
         $form->handleRequest($request);

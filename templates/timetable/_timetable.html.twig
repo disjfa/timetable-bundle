@@ -1,7 +1,6 @@
 <div class="d-flex justify-content-between align-items-center">
     <h1>
         {{ timetable.title }}
-
     </h1>
     {% if timetable.public %}
         <div data-controller="share">
@@ -59,59 +58,75 @@
                                     <i class="fas fa-file-half-dashed"></i>
                                     callsheet
                                 </a>
+                                {% if place.items is empty %}
+                                    <a href="{{ path('disjfa_timetable_place_delete', {'timetablePlace': place.id}) }}" class="btn btn-sm btn-outline-primary" title="delete place">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                {% endif %}
                             </div>
                         {% endif %}
                     </div>
                     {% for item in date.items %}
                         {% if item.place.id == place.id %}
-                            <div class="box" style="{{ item.class }}" {{ stimulus_controller('like-item', {timetable: timetable.id, item: item.id}) }}>
-                                <strong class="d-flex justify-content-between align-items-center">
-                                    <div>
+                            <div class="box {{ item.class }}" style="{{ item.style }}" {{ stimulus_controller('like-item', {timetable: timetable.id, item: item.id}) }}>
+                                {% if item.line %}
+                                    <div class="box-line-title" title="{{ item.dateStart | date('H:i') }}">
                                         {{ item.title }}
-                                        {% if item.description %}
-                                            <button class="btn btn-sm btn-outline-success d-print-none" commandfor="item-{{ item.id }}-dialog" command="show-modal">
-                                                <i class="fa-solid fa-fw fa-circle-info"></i>
-                                            </button>
+                                        {% if is_granted('update', timetable) %}
+                                            <a href="{{ path('disjfa_timetable_item_edit', {'timetableItem': item.id}) }}" class="d-print-none">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
                                         {% endif %}
                                     </div>
-                                    <a {{ stimulus_target('like-item', 'star') }} {{ stimulus_action('like-item', 'like', 'click') }} href="#" class="btn btn-sm btn-outline-success">
-                                        <i class="fa-regular fa-fw fa-star"></i>
-                                    </a>
-                                </strong>
-                                <div class="small">
-                                    {{ item.intro | markdown_to_html }}
-                                </div>
-                                <dialog id="item-{{ item.id }}-dialog" class="timetable-dialog">
-                                    <div class="d-flex justify-content-between">
-                                        <h3>{{ item.title }}</h3>
-                                        <button commandfor="item-{{ item.id }}-dialog" command="close" class="btn btn-outline-secondary">
-                                            Close
-                                        </button>
-                                    </div>
-                                    <div class="pb-2">
+                                {% else %}
+                                    <strong class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            {{ item.title }}
+                                            {% if item.description %}
+                                                <button class="btn btn-sm btn-outline-success d-print-none" commandfor="item-{{ item.id }}-dialog" command="show-modal">
+                                                    <i class="fa-solid fa-fw fa-circle-info"></i>
+                                                </button>
+                                            {% endif %}
+                                        </div>
                                         <a {{ stimulus_target('like-item', 'star') }} {{ stimulus_action('like-item', 'like', 'click') }} href="#" class="btn btn-sm btn-outline-success">
                                             <i class="fa-regular fa-fw fa-star"></i>
                                         </a>
+                                    </strong>
+                                    <div class="small">
+                                        {{ item.intro | markdown_to_html }}
+                                    </div>
+                                    <dialog id="item-{{ item.id }}-dialog" class="timetable-dialog">
+                                        <div class="d-flex justify-content-between">
+                                            <h3>{{ item.title }}</h3>
+                                            <button commandfor="item-{{ item.id }}-dialog" command="close" class="btn btn-outline-secondary">
+                                                Close
+                                            </button>
+                                        </div>
+                                        <div class="pb-2">
+                                            <a {{ stimulus_target('like-item', 'star') }} {{ stimulus_action('like-item', 'like', 'click') }} href="#" class="btn btn-sm btn-outline-success">
+                                                <i class="fa-regular fa-fw fa-star"></i>
+                                            </a>
+                                            <small class="text-muted">
+                                                <i class="fa fa-clock"></i>
+                                                {{ item.dateStart | date('H:i') }}
+                                                / {{ item.dateEnd | date('H:i') }}
+                                            </small>
+                                        </div>
+                                        {{ item.description | markdown_to_html }}
+                                    </dialog>
+                                    <div>
                                         <small class="text-muted">
                                             <i class="fa fa-clock"></i>
                                             {{ item.dateStart | date('H:i') }}
                                             / {{ item.dateEnd | date('H:i') }}
                                         </small>
                                     </div>
-                                    {{ item.description | markdown_to_html }}
-                                </dialog>
-                                <div>
-                                    <small class="text-muted">
-                                        <i class="fa fa-clock"></i>
-                                        {{ item.dateStart | date('H:i') }}
-                                        / {{ item.dateEnd | date('H:i') }}
-                                    </small>
-                                </div>
-                                {% if is_granted('update', timetable) %}
-                                    <a href="{{ path('disjfa_timetable_item_edit', {'timetableItem': item.id}) }}" class="btn btn-sm btn-outline-primary d-print-none">
-                                        <i class="fas fa-edit"></i>
-                                        edit
-                                    </a>
+                                    {% if is_granted('update', timetable) %}
+                                        <a href="{{ path('disjfa_timetable_item_edit', {'timetableItem': item.id}) }}" class="btn btn-sm btn-outline-primary d-print-none">
+                                            <i class="fas fa-edit"></i>
+                                            edit
+                                        </a>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         {% endif %}

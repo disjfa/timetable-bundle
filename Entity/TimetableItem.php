@@ -85,7 +85,7 @@ class TimetableItem
 
     public function getId(): string
     {
-        return $this->id;
+        return (string) $this->id;
     }
 
     /**
@@ -190,7 +190,7 @@ class TimetableItem
         return $this->end;
     }
 
-    public function getClass()
+    public function getStyle(): string
     {
         $start = $this->getStart();
         $end = $this->getEnd();
@@ -202,5 +202,22 @@ class TimetableItem
         }
 
         return "grid-row: $start / $end; grid-column: $index;";
+    }
+
+    public function isLine(): bool
+    {
+        $start = $this->getStart();
+        $end = $this->getEnd();
+
+        return $start === $end;
+    }
+
+    public function getClass(): string
+    {
+        if ($this->isLine()) {
+            return 'box-line';
+        }
+
+        return '';
     }
 }
