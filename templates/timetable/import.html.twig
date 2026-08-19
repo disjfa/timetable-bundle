@@ -1,0 +1,56 @@
+{% extends "@DisjfaTimetable/base.html.twig" %}
+
+{% block _disjfa_timetable_content %}
+
+    {% include '@DisjfaTimetable/timetable/_style.html.twig' %}
+
+    <div class="container py-4">
+        {% include '@DisjfaTimetable/timetable/_menu.html.twig' %}
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <h2>Import timetable</h2>
+                {{ form_start(form, {attr: {enctype: 'multipart/form-data'}}) }}
+                <div class="mb-3">
+                    {{ form_row(form.file) }}
+                </div>
+                <button type="submit" class="btn btn-primary">Import</button>
+                <a href="{{ path('disjfa_timetable_timetable_show', {timetable: timetable.id}) }}" class="btn btn-secondary ms-2">Cancel</a>
+                {{ form_end(form) }}
+            </div>
+
+            {% if result is defined %}
+                <div class="col-12 mt-4">
+                    <div class="alert alert-{{ result.hasErrors ? 'warning' : 'success' }}">
+                        <strong>{{ result.imported }}</strong> item(s) imported.
+                        {% if result.skipped > 0 %}
+                            <strong>{{ result.skipped }}</strong> row(s) skipped due to errors.
+                        {% endif %}
+                    </div>
+
+                    {% if result.errors|length > 0 %}
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Row</th>
+                                <th>Field</th>
+                                <th>Error</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for error in result.errors %}
+                                <tr class="table-danger">
+                                    <td>{{ error.row }}</td>
+                                    <td>{{ error.field }}</td>
+                                    <td>{{ error.message }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+

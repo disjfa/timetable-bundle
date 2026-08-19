@@ -8,6 +8,8 @@ use Disjfa\TimetableBundle\Entity\TimetableDate;
 use Disjfa\TimetableBundle\Entity\TimetableItem;
 use Disjfa\TimetableBundle\Entity\TimetablePlace;
 use Disjfa\TimetableBundle\Excel\TimetableExport;
+use Disjfa\TimetableBundle\Excel\TimetableImport;
+use Disjfa\TimetableBundle\Form\Type\TimetableImportType;
 use Disjfa\TimetableBundle\Form\Type\TimetableSetupType;
 use Disjfa\TimetableBundle\Form\Type\TimetableType;
 use Disjfa\TimetableBundle\Security\TimetableVoter;
@@ -261,5 +263,29 @@ class TimetableController extends AbstractController
         $this->denyAccessUnlessGranted(TimetableVoter::UPDATE, $timetable);
 
         return $timetableExport->export($timetable);
+    }
+
+    #[Route(path: '/{timetable}/import', name: 'disjfa_timetable_timetable_import', methods: ['GET', 'POST'])]
+    public function importAction(Request $request, Timetable $timetable, TimetableImport $timetableImport): Response
+    {
+        $this->denyAccessUnlessGranted(TimetableVoter::UPDATE, $timetable);
+
+        $form = $this->createForm(TimetableImportType::class);
+        $form->handleRequest($request);
+
+        $templateVars = ['timetable' => $timetable, 'form' => $form];
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $file = $form->get('file')->getData();
+
+            $result = $timetableImport->import($timetable, $file);
+            $templateVars['result'] = $result;
+
+            if (!$result->hasErrors()) {
+                $this->addFlash('success', sprintf('%d item(s) imported successfully.', $result->getImported()));
+            }
+        }
+
+        return $this->render('@DisjfaTimetable/timetable/import.html.twig', $templateVars);
     }
 }

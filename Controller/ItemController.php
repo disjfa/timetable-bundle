@@ -48,13 +48,15 @@ class ItemController extends AbstractController
         $this->denyAccessUnlessGranted(TimetableVoter::UPDATE, $timetableItem->getDate()->getTimetable());
 
         $timetable = $timetableItem->getPlace()->getTimetable();
-        $form = $this->createFormBuilder($timetableItem)
+        $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('disjfa_timetable_item_delete', ['timetableItem' => $timetableItem->getId()]))
             ->setMethod('POST')
             ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $timetableItem->getDate()->getItems()->removeElement($timetableItem);
+            $timetableItem->getPlace()->getItems()->removeElement($timetableItem);
             $this->entityManager->remove($timetableItem);
             $this->entityManager->flush();
 

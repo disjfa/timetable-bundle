@@ -56,7 +56,7 @@ class PlaceController extends AbstractController
             ]);
         }
 
-        $form = $this->createFormBuilder($timetablePlace)
+        $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('disjfa_timetable_place_delete', ['timetablePlace' => $timetablePlace->getId()]))
             ->setMethod('POST')
             ->getForm();
