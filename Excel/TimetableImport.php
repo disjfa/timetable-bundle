@@ -70,7 +70,7 @@ class TimetableImport
             $timetableDate = $this->resolveDate($timetable, $rowData, $dateAt);
             $timetablePlace = $this->resolvePlace($timetable, $rowData);
 
-            $item = new TimetableItem($timetablePlace, $timetableDate);
+            $item = $this->resolveItem($timetable, $rowData, $timetableDate, $timetablePlace);
             $item->setTitle((string) $rowData['title']);
             $item->setDescription((string) ($rowData['description'] ?? ''));
             $item->setDateStart($start);
@@ -138,14 +138,35 @@ class TimetableImport
         }
 
         // Date constraints
-        if (null === $this->parseDateTime($rowData['date_at'])) {
+        $dateAt = $this->parseDateTime($rowData['date_at']);
+        $start = $this->parseDateTime($rowData['start']);
+        $end = $this->parseDateTime($rowData['end']);
+
+        if (null === $dateAt) {
             $errors[] = ['date_at', sprintf('Row %d: "date_at" is not a valid date.', $row)];
         }
-        if (null === $this->parseDateTime($rowData['start'])) {
+        if (null === $start) {
             $errors[] = ['start', sprintf('Row %d: "start" is not a valid datetime.', $row)];
         }
-        if (null === $this->parseDateTime($rowData['end'])) {
+        if (null === $end) {
             $errors[] = ['end', sprintf('Row %d: "end" is not a valid datetime.', $row)];
+        }
+
+        if ($dateAt instanceof \DateTime && $start instanceof \DateTime && $end instanceof \DateTime) {
+            if ($start > $end) {
+                $errors[] = ['start', sprintf('Row %d: "start" must be before or equal to "end".', $row)];
+            }
+
+            $windowStart = (clone $dateAt)->setTime(0, 0, 0);
+            $windowEnd = (clone $windowStart)->modify('+2 days');
+
+            if ($start <= $windowStart || $start >= $windowEnd) {
+                $errors[] = ['start', sprintf('Row %d: "start" must be greater than date_at 00:00 and smaller than 2 days after date_at.', $row)];
+            }
+
+            if ($end <= $windowStart || $end >= $windowEnd) {
+                $errors[] = ['end', sprintf('Row %d: "end" must be greater than date_at 00:00 and smaller than 2 days after date_at.', $row)];
+            }
         }
 
         return $errors;
@@ -229,6 +250,36 @@ class TimetableImport
         $timetable->getPlaces()->add($timetablePlace);
 
         return $timetablePlace;
+    }
+
+    /**
+     * @param array<string, mixed> $rowData
+     */
+    private function resolveItem(
+        Timetable $timetable,
+        array $rowData,
+        TimetableDate $timetableDate,
+        TimetablePlace $timetablePlace,
+    ): TimetableItem {
+        $itemId = (string) ($rowData['id'] ?? '');
+        $title = (string) ($rowData['title'] ?? '');
+        $titleSlug = $this->toKebab($title);
+
+        foreach ($timetable->getDates() as $date) {
+            foreach ($date->getItems() as $existing) {
+                if ('' !== $itemId && $existing->getId() === $itemId) {
+                    return $existing;
+                }
+
+                if ($this->toKebab($existing->getTitle()) === $titleSlug) {
+                    return $existing;
+                }
+            }
+        }
+
+        $item = new TimetableItem($timetablePlace, $timetableDate);
+
+        return $item;
     }
 
     private function toKebab(string $value): string

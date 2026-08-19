@@ -62,6 +62,7 @@ class TimetableDate
     public function __construct()
     {
         $this->dateAt = new \DateTime();
+        $this->items = new ArrayCollection();
     }
 
     public function getId(): ?string
