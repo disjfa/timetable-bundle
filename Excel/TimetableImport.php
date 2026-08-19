@@ -265,12 +265,18 @@ class TimetableImport
         $title = (string) ($rowData['title'] ?? '');
         $titleSlug = $this->toKebab($title);
 
+        if ('' !== $itemId) {
+            foreach ($timetable->getDates() as $date) {
+                foreach ($date->getItems() as $existing) {
+                    if ($existing->getId() === $itemId) {
+                        return $existing;
+                    }
+                }
+            }
+        }
+
         foreach ($timetable->getDates() as $date) {
             foreach ($date->getItems() as $existing) {
-                if ('' !== $itemId && $existing->getId() === $itemId) {
-                    return $existing;
-                }
-
                 if ($this->toKebab($existing->getTitle()) === $titleSlug) {
                     return $existing;
                 }
