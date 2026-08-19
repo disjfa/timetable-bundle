@@ -7,6 +7,7 @@ use Disjfa\TimetableBundle\Entity\Timetable;
 use Disjfa\TimetableBundle\Entity\TimetableDate;
 use Disjfa\TimetableBundle\Entity\TimetableItem;
 use Disjfa\TimetableBundle\Entity\TimetablePlace;
+use Disjfa\TimetableBundle\Excel\TimetableExport;
 use Disjfa\TimetableBundle\Form\Type\TimetableSetupType;
 use Disjfa\TimetableBundle\Form\Type\TimetableType;
 use Disjfa\TimetableBundle\Security\TimetableVoter;
@@ -252,5 +253,13 @@ class TimetableController extends AbstractController
             'form' => $form->createView(),
             'timetable' => $form->getData(),
         ]);
+    }
+
+    #[Route(path: '/{timetable}/export', name: 'disjfa_timetable_timetable_export')]
+    public function exportAction(Timetable $timetable, TimetableExport $timetableExport): Response
+    {
+        $this->denyAccessUnlessGranted(TimetableVoter::UPDATE, $timetable);
+
+        return $timetableExport->export($timetable);
     }
 }

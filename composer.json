@@ -7,6 +7,7 @@
     "type": "symfony-bundle",
     "require": {
         "league/fractal": "^0.20",
+        "phpoffice/phpspreadsheet": "*",
         "symfony/form": "^6.0|^7.0",
         "symfony/orm-pack": "*",
         "symfony/security-bundle": "^6.0|^7.0",
