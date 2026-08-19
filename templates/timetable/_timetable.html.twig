@@ -12,18 +12,7 @@
     {% endif %}
 </div>
 {{ timetable.intro | markdown_to_html }}
-{% if is_granted('update', timetable) %}
-    <div class="btn-group d-print-none">
-        <a href="{{ path('disjfa_timetable_timetable_edit', {'timetable': timetable.id}) }}" class="btn btn-sm btn-outline-primary">
-            <i class="fas fa-edit"></i>
-            edit timetable
-        </a>
-        <a href="{{ path('disjfa_timetable_timetable_setup', {'timetable': timetable.id}) }}" class="btn btn-sm btn-outline-primary">
-            <i class="fas fa-gear"></i>
-            setup dates and places
-        </a>
-    </div>
-{% endif %}
+
 
 
 {% for date in timetable.dates %}

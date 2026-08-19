@@ -6,5 +6,39 @@
         <li class="nav-item">
             <a class="nav-link {% if app.request.attributes.get('_route') == 'disjfa_timetable_timetable_about' %} active{% endif %}" href="{{ path('disjfa_timetable_timetable_about', {timetable: timetable.id}) }}">About</a>
         </li>
+        {% if is_granted('update', timetable) %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle{% if app.request.attributes.get('_route') in ['disjfa_timetable_timetable_edit', 'disjfa_timetable_timetable_setup', 'disjfa_timetable_timetable_import'] %} active{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-gear"></i>
+                    Actions
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" href="{{ path('disjfa_timetable_timetable_edit', {'timetable': timetable.id}) }}">
+                            <i class="fas fa-edit me-2"></i>
+                            edit timetable
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ path('disjfa_timetable_timetable_setup', {'timetable': timetable.id}) }}">
+                            <i class="fas fa-gear me-2"></i>
+                            setup dates and places
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ path('disjfa_timetable_timetable_export', {'timetable': timetable.id}) }}">
+                            <i class="fas fa-download me-2"></i>
+                            export
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ path('disjfa_timetable_timetable_import', {'timetable': timetable.id}) }}">
+                            <i class="fas fa-upload me-2"></i>
+                            import
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        {% endif %}
     </ul>
 {% endif %}

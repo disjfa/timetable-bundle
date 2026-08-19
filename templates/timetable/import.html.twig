@@ -8,16 +8,37 @@
         {% include '@DisjfaTimetable/timetable/_menu.html.twig' %}
 
         <div class="row">
+            <h2>Import timetable</h2>
             <div class="col-12 col-md-6">
-                <h2>Import timetable</h2>
-                {{ form_start(form, {attr: {enctype: 'multipart/form-data'}}) }}
-                <div class="mb-3">
-                    {{ form_row(form.file) }}
-                </div>
-                <button type="submit" class="btn btn-primary">Import</button>
-                <a href="{{ path('disjfa_timetable_timetable_show', {timetable: timetable.id}) }}" class="btn btn-secondary ms-2">Cancel</a>
-                {{ form_end(form) }}
+                <p>
+                    Upload an <code>.xlsx</code> file to import items into this timetable.
+                    You can use the <a href="{{ path('disjfa_timetable_timetable_export', {timetable: timetable.id}) }}">export</a> as a starting template.
+                </p>
             </div>
+
+            <div class="col-12 col-md-6">
+                <h5>Columns</h5>
+                <p class="">In the same order as the export. <span class="text-danger">*</span> required.</p>
+                <p>
+                    id,
+                    <strong>title</strong><span class="text-danger">*</span>,
+                    description,
+                    <strong>start</strong><span class="text-danger">*</span>,
+                    <strong>end</strong><span class="text-danger">*</span>,
+                    date_id,
+                    date_title,
+                    <strong>date_at</strong><span class="text-danger">*</span>,
+                    place_id,
+                    <strong>place_title</strong><span class="text-danger">*</span>
+                </p>
+            </div>
+            {{ form_start(form, {attr: {enctype: 'multipart/form-data'}}) }}
+            <div class="mb-3">
+                {{ form_row(form.file) }}
+            </div>
+            <button type="submit" class="btn btn-primary">Import</button>
+            <a href="{{ path('disjfa_timetable_timetable_show', {timetable: timetable.id}) }}" class="btn btn-secondary ms-2">Cancel</a>
+            {{ form_end(form) }}
 
             {% if result is defined %}
                 <div class="col-12 mt-4">
